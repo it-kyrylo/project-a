@@ -1,64 +1,38 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using ProjectA.Auxiliary;
+using ProjectA.Clients;
 using ProjectA.Models;
 using ProjectA.Repositories;
-using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 public class PlayersRepository<T> : IPlayersRepository<T> where T : class
 {
-	private readonly Dictionary<string, T> playersData;
+	private Dictionary<string, T> playersData;
+    private readonly IFantasyPremierLeagueClient _leagueClient;
 
-    public async Task<PlayersRepository<T>> Create()
-    {
-        PlayersRepository<T> currentClass = new PlayersRepository<T>();
-        List<T> data = await currentClass.LoadPlayers();
-        currentClass.PopulatePlayersData(data);
-        return currentClass;
-    }
-
-    private PlayersRepository()
+    public PlayersRepository(IFantasyPremierLeagueClient leagueClient)
 	{
         this.playersData = new Dictionary<string, T>();
+        this._leagueClient = leagueClient;
+        List<T> data = this.LoadPlayers().Result;
+        this.PopulatePlayersData(data);
     }
 
     private async Task<List<T>> LoadPlayers()
     {
-        const string URL = "https://fantasy.premierleague.com/api/bootstrap-static/";
-
-        using (var client = new HttpClient())
-        {
-            client.BaseAddress = new Uri(URL);
-
-            HttpResponseMessage response = await client.GetAsync(URL);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return JsonConvert.DeserializeObject<List<T>>(await response.Content.ReadAsStringAsync());
-            }
-            else
-            {
-                return null;
-            }
-        }
+        string response = await this._leagueClient.LoadBootstrapStaticPlayersDataTeamsAsync();
+        string elements = JObject.Parse(response)["elements"].ToString(); ;
+        return JsonConvert.DeserializeObject<List<T>>(elements);
     }
 
     private void PopulatePlayersData(List<T> data)
     {
         foreach (T currentData in data)
         {
-            string key;
-            if (currentData.GetType() == typeof(PerformancePlayerData))
-            {
-                PerformancePlayerData tmp = (PerformancePlayerData)(object)currentData;
-                key = tmp.FirstName + " " + tmp.LastName;
-            }
-            else
-            {
-                StatisticsPlayerData tmp = (StatisticsPlayerData)(object)currentData;
-                key = tmp.FirstName + " " + tmp.LastName;
-            }
+            Player tmp = (Player)(object)currentData;
+            string key = KeyBuilder.Build(tmp.FirstName, tmp.LastName);
             this.playersData[key] = currentData;
         }
     }
@@ -76,18 +50,8 @@ public class PlayersRepository<T> : IPlayersRepository<T> where T : class
     {
         if (this.playersData.ContainsKey(playerName) == true)
         {
-            int id;
-            T currentPlayer = this.playersData[playerName];
-            if (currentPlayer.GetType() == typeof(PerformancePlayerData))
-            {
-                PerformancePlayerData tmp = (PerformancePlayerData)(object)currentPlayer;
-                id = tmp.Id;
-            }
-            else
-            {
-                StatisticsPlayerData tmp = (StatisticsPlayerData)(object)currentPlayer;
-                id = tmp.Id;
-            }
+            Player tmp = (Player)(object)this.playersData[playerName];
+            int id = tmp.Id;
             return id;
         }
         return -1;

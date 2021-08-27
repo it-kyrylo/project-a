@@ -7,8 +7,6 @@ namespace ProjectA.Repositories
 {
     public interface IPlayersRepository<T> where T : class
     {
-        public Task<PlayersRepository<T>> Create();
-
         public T GetPlayerData(string playerName);
 
         public int GetPlayerId(string playerName);
