@@ -11,5 +11,8 @@ namespace ProjectA.Clients
     {
         [Get("/api/bootstrap-static/")]
         Task<TeamsData> LoadBootstrapStaticDataTeamsAsync();
+
+        [Get("/api/bootstrap-static/")]
+        Task<string> LoadBootstrapStaticPlayersDataTeamsAsync();
     }
 }
