@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ProjectA.Clients;
 using ProjectA.Repositories;
 using Refit;
 using System;
@@ -28,10 +29,9 @@ namespace ProjectA
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
-            services.AddRefitClient<IFantasyPremierLeagueRepository>()
-                    .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetSection("urls").Value));
+            services.AddRefitClient<IFantasyPremierLeagueClient>()
+                    .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetSection("FantasyPremierLeagueUrl").Value));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProjectA", Version = "v1" });

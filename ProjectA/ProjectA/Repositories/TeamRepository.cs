@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using ProjectA.Clients;
 using ProjectA.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +9,16 @@ namespace ProjectA.Repositories
 {
     public class TeamRepository :ITeamRepository
     {
-        private readonly IFantasyPremierLeagueRepository _leagueRepository;
+        private readonly IFantasyPremierLeagueClient _leagueClient;
 
-        public TeamRepository(IFantasyPremierLeagueRepository leagueRepository)
+        public TeamRepository(IFantasyPremierLeagueClient leagueClient)
         {
-            _leagueRepository = leagueRepository;
+            _leagueClient = leagueClient;
         }
 
-        public Team GetTeamByName(string name)
+        public async Task<Team> GetTeamByNameAsync(string name)
         {
-            var allTeams = GetAllTeams().Result;
+            var allTeams = await GetAllTeamsAsync();
        
             var team = allTeams.FirstOrDefault(n => n.Name == name);
        
@@ -25,14 +26,11 @@ namespace ProjectA.Repositories
         }
 
 
-       public async Task<IEnumerable<Team>> GetAllTeams()
+       public async Task<IEnumerable<Team>> GetAllTeamsAsync()
        {
-
-           var teamsData = JsonConvert.DeserializeObject<TeamsData>(await _leagueRepository.LoadBootstrapStaticData());
-       
-       
-           return teamsData.Teams;
-       
+           var teamsData = await _leagueClient.LoadBootstrapStaticDataTeamsAsync();
+        
+           return teamsData.Teams;       
        }
 
     }
