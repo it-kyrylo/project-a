@@ -4,35 +4,35 @@ namespace ProjectA.Models.PlayersModels
 {
     public class Player
     {
-		[JsonProperty("id")]
-		public int Id { get; set; }
+	[JsonProperty("id")]
+	public int Id { get; set; }
 
-		[JsonProperty("first_name")]
-		public string FirstName { get; set; }
+	[JsonProperty("first_name")]
+	public string FirstName { get; set; }
 
-		[JsonProperty("second_name")]
-		public string LastName { get; set; }
+	[JsonProperty("second_name")]
+	public string LastName { get; set; }
 
-		[JsonProperty("element_type")]
-		public int GamePosition { get; set; }
+	[JsonProperty("element_type")]
+	public int GamePosition { get; set; }
 
-		[JsonProperty("minutes")]
-		public int MinutesInPlay { get; set; }
+	[JsonProperty("minutes")]
+	public int MinutesInPlay { get; set; }
 
-		[JsonProperty("team")]
-		public int CurrentTeam { get; set; }
+	[JsonProperty("team")]
+	public int CurrentTeam { get; set; }
 
-		[JsonProperty("goals_scored")]
-		public int GoalsScored { get; set; }
+	[JsonProperty("goals_scored")]
+	public int GoalsScored { get; set; }
 
-		[JsonProperty("assists")]
-		public int Assists { get; set; }
+	[JsonProperty("assists")]
+	public int Assists { get; set; }
 
-		[JsonProperty("yellow_cards")]
-		public int YellowCards { get; set; }
+	[JsonProperty("yellow_cards")]
+	public int YellowCards { get; set; }
 
-		[JsonProperty("red_cards")]
-		public int RedCards { get; set; }
+	[JsonProperty("red_cards")]
+	public int RedCards { get; set; }
 
         [JsonProperty("form")]
         public double Form { get; set; }
