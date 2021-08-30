@@ -1,10 +1,11 @@
-﻿using ProjectA.Clients;
-using ProjectA.Models.Teams;
+﻿using Newtonsoft.Json;
+using ProjectA.Clients;
+using ProjectA.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjectA.Repositories.Teams
+namespace ProjectA.Repositories
 {
     public class TeamRepository :ITeamRepository
     {
