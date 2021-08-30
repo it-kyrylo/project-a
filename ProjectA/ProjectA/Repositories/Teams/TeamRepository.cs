@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json;
-using ProjectA.Clients;
-using ProjectA.Models;
+﻿using ProjectA.Clients;
+using ProjectA.Models.Teams;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjectA.Repositories
+namespace ProjectA.Repositories.Teams
 {
-    public class TeamRepository : ITeamRepository
+    public class TeamRepository :ITeamRepository
     {
         private readonly IFantasyPremierLeagueClient _leagueClient;
 
