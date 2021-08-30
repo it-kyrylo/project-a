@@ -1,8 +1,8 @@
-﻿using ProjectA.Models;
+﻿using ProjectA.Models.Teams;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ProjectA.Repositories
+namespace ProjectA.Repositories.Teams
 {
     public interface ITeamRepository
     {        
