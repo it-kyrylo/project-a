@@ -1,4 +1,5 @@
-﻿using ProjectA.Models;
+﻿using ProjectA.Models.PlayersModels;
+using ProjectA.Models;
 using Refit;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,8 @@ namespace ProjectA.Clients
     {
         [Get("/api/bootstrap-static/")]
         Task<TeamsData> LoadBootstrapStaticDataTeamsAsync();
+
+        [Get("/api/bootstrap-static/")]
+        Task<PlayersData> LoadBootstrapPlayersDataAsync();
     }
 }
