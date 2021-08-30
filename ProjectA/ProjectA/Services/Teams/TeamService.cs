@@ -70,7 +70,7 @@ namespace ProjectA.Services.Teams
                 return _mapper.Map<TeamServiceModel>(team);
             }
 
-            return new TeamServiceModel() { Name = "There is no such team" };
+            return null;
         }
 
         public async Task<IEnumerable<TeamServiceModel>> GetTeamsWithMostDrawsAsync()
