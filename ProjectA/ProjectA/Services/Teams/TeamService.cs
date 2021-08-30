@@ -48,7 +48,7 @@ namespace ProjectA.Services.Teams
             return _mapper.Map<TeamServiceModel>(strongestTeamHome);
         }
 
-        public async Task<IEnumerable<TeamServiceModel>> GetTopThreeStrongestTeamOverallAsync()
+        public async Task<IEnumerable<TeamServiceModel>> GetTopThreeStrongestTeamsAsync()
         {
             var allTeams = await _teamRepository.GetAllTeamsAsync();
 
@@ -109,14 +109,6 @@ namespace ProjectA.Services.Teams
             return _mapper.Map<IEnumerable<TeamServiceModel>>(teamsWithMostWins);
         }
 
-        public async Task<IEnumerable<TeamServiceModel>> GetTopThreeStrongestTeamsAsync()
-        {
-            var allTeams = await _teamRepository.GetAllTeamsAsync();
-
-            var topThreeTeams = allTeams.OrderByDescending(s => s.Strength).Take(3);
-
-
-            return _mapper.Map<IEnumerable<TeamServiceModel>>(topThreeTeams);
-        }
+     
     }
 }

@@ -16,8 +16,6 @@ namespace ProjectA.Services.Teams
 
         Task<TeamServiceModel> GetStrongestTeamAwayAsync();
 
-        Task<IEnumerable<TeamServiceModel>> GetTopThreeStrongestTeamOverallAsync();
-
         Task<IEnumerable<TeamServiceModel>> GetTeamsWithMostWinsAsync();
 
         Task<IEnumerable<TeamServiceModel>> GetTeamsWithMostLossesAsync();
