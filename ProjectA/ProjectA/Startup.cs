@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using ProjectA.Clients;
 using ProjectA.Repositories;
+using ProjectA.Repositories.PlayersRepository;
+using ProjectA.Services.PlayersSuggestion;
 using Refit;
 using System;
 using System.Collections.Generic;
@@ -36,6 +38,9 @@ namespace ProjectA
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProjectA", Version = "v1" });
             });
+
+            services.AddScoped<IPlayersRepository, PlayersRepository>();
+            services.AddScoped<IPlayerSuggestionService, PlayerSuggestionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

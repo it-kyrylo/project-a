@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProjectA.Repositories
 {
-    public class TeamRepository :ITeamRepository
+    public class TeamRepository : ITeamRepository
     {
         private readonly IFantasyPremierLeagueClient _leagueClient;
 

@@ -3,30 +3,32 @@ using Newtonsoft.Json.Linq;
 using ProjectA.Infrastructure;
 using ProjectA.Clients;
 using ProjectA.Models.PlayersModels;
-using ProjectA.Repositories.PlayersRepository;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
 
-public class PlayersRepository : IPlayersRepository
+namespace ProjectA.Repositories.PlayersRepository
 {
-    private readonly IFantasyPremierLeagueClient _leagueClient;
-
-    public PlayersRepository(IFantasyPremierLeagueClient leagueClient)
-	{
-        this._leagueClient = leagueClient;
-    }
-
-    public async Task<Player> GetPlayerDataAsync(string playerName)
+    public class PlayersRepository : IPlayersRepository
     {
-        var allPlyers = await this.GetAllPlayersAsync();
-        return allPlyers.FirstOrDefault(p => KeyBuilder.Build(p.FirstName, p.LastName) == playerName);
-    }
+        private readonly IFantasyPremierLeagueClient _leagueClient;
 
-    public async Task<IEnumerable<Player>> GetAllPlayersAsync()
-    {
-        var playersDataPerformance = await _leagueClient.LoadBootstrapPlayersDataAsync();
-        return playersDataPerformance.Players;
+        public PlayersRepository(IFantasyPremierLeagueClient leagueClient)
+        {
+            _leagueClient = leagueClient;
+        }
+
+        public async Task<Players> GetPlayerDataAsync(string playerName)
+        {
+            var allPlyers = await GetAllPlayersAsync();
+            return allPlyers.FirstOrDefault(p => KeyBuilder.Build(p.FirstName, p.LastName) == playerName);
+        }
+
+        public async Task<IEnumerable<Players>> GetAllPlayersAsync()
+        {
+            var playersDataPerformance = await _leagueClient.LoadBootstrapPlayersDataAsync();
+            return playersDataPerformance.Players;
+        }
     }
 }
