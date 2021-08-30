@@ -1,8 +1,7 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
-namespace ProjectA.Models
+namespace ProjectA.Models.Teams
 {
     public class TeamsData
     {
