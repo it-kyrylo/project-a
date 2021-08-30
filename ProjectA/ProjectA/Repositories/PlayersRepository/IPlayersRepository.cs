@@ -6,8 +6,8 @@ namespace ProjectA.Repositories.PlayersRepository
 {
     public interface IPlayersRepository
     {
-        public Task<Players> GetPlayerDataAsync(string playerName);
+        public Task<Player> GetPlayerDataAsync(string playerName);
 
-        public Task<IEnumerable<Players>> GetAllPlayersAsync();
+        public Task<IEnumerable<Player>> GetAllPlayersAsync();
     }
 }

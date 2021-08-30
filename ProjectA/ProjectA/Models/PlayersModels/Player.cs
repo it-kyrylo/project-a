@@ -2,7 +2,7 @@
 
 namespace ProjectA.Models.PlayersModels
 {
-    public class Players
+    public class Player
     {
 	[JsonProperty("id")]
 	public int Id { get; set; }

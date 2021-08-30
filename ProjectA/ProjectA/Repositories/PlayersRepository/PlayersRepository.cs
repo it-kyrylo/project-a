@@ -19,13 +19,13 @@ namespace ProjectA.Repositories.PlayersRepository
             _leagueClient = leagueClient;
         }
 
-        public async Task<Players> GetPlayerDataAsync(string playerName)
+        public async Task<Player> GetPlayerDataAsync(string playerName)
         {
             var allPlyers = await GetAllPlayersAsync();
             return allPlyers.FirstOrDefault(p => KeyBuilder.Build(p.FirstName, p.LastName) == playerName);
         }
 
-        public async Task<IEnumerable<Players>> GetAllPlayersAsync()
+        public async Task<IEnumerable<Player>> GetAllPlayersAsync()
         {
             var playersDataPerformance = await _leagueClient.LoadBootstrapPlayersDataAsync();
             return playersDataPerformance.Players;

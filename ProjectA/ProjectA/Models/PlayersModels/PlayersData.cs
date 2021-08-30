@@ -8,6 +8,6 @@ namespace ProjectA.Models.PlayersModels
 {
     public class PlayersData
     {
-        public List<Players> Players { get; set; }
+        public List<Player> Players { get; set; }
     }
 }
