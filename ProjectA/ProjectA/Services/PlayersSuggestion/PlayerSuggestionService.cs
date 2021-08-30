@@ -211,8 +211,8 @@ namespace ProjectA.Services.PlayersSuggestion
 
         private static bool IsPriceRangeValid(double minPrice, double maxPrice)
         {
-            if (minPrice <= UsualFPLPlayerMinPrice || 
-                minPrice >= maxPrice || 
+            if (minPrice <= UsualFPLPlayerMinPrice ||
+                minPrice >= maxPrice ||
                 maxPrice >= UsualFPLPlayerMaxPrice)
             {
                 return false;
@@ -228,4 +228,3 @@ namespace ProjectA.Services.PlayersSuggestion
         }
     }
 }
-
