@@ -39,6 +39,23 @@ namespace ProjectA.Services.Statistics
             }
         }
 
+        private string GetPositionName(int positionIndex)
+        {
+            switch (positionIndex)
+            {
+                case 1:
+                    return "Goalkeeper";
+                case 2:
+                    return "Defender";
+                case 3:
+                    return "Midfielder";
+                case 4:
+                    return "Forward";
+                default:
+                    return "No such position";
+            }
+        }
+
         public async Task<Element> GetPayerData(string playerName)
         {
             Element player = await this._playersRepository.GetPlayerDataAsync(playerName);
@@ -53,11 +70,11 @@ namespace ProjectA.Services.Statistics
         {
             IEnumerable<Element> playerData = await this._playersRepository.GetAllPlayersAsync();
             var scores = playerData
-                .OrderByDescending(p => p.GoalsScored)
-                .ThenByDescending(p => KeyBuilder.Build(p.FirstName, p.LastName))
+                .OrderByDescending(p => p.Goals_Scored)
+                .ThenByDescending(p => KeyBuilder.Build(p.First_Name, p.Second_Name))
                 .Select(p => new ScorersData {
-                    PlayerName = KeyBuilder.Build(p.FirstName, p.LastName), 
-                    ScoredGoals = p.GoalsScored
+                    PlayerName = KeyBuilder.Build(p.First_Name, p.Second_Name), 
+                    ScoredGoals = p.Goals_Scored
                 });
 
             if (toPlace >= scores.Count() || toPlace < 0)
@@ -77,12 +94,12 @@ namespace ProjectA.Services.Statistics
 
             IEnumerable<Element> playerData = await this._playersRepository.GetAllPlayersAsync();
             var scores = playerData
-                .OrderByDescending(p => p.GoalsScored)
-                .ThenByDescending(p => KeyBuilder.Build(p.FirstName, p.LastName))
+                .OrderByDescending(p => p.Goals_Scored)
+                .ThenByDescending(p => KeyBuilder.Build(p.First_Name, p.Second_Name))
                 .Select(p => new ScorersData
                 {
-                    PlayerName = KeyBuilder.Build(p.FirstName, p.LastName),
-                    ScoredGoals = p.GoalsScored
+                    PlayerName = KeyBuilder.Build(p.First_Name, p.Second_Name),
+                    ScoredGoals = p.Goals_Scored
                 }); 
 
             if (toPlace >= scores.Count() || toPlace < 0)
@@ -101,7 +118,7 @@ namespace ProjectA.Services.Statistics
                 return null;
             }
 
-            return this._playersRepository.GetAllPlayersAsync().Result.Where(p => p.CurrentTeam == team.Id && p.GamePositionIndex == positionIndex);
+            return this._playersRepository.GetAllPlayersAsync().Result.Where(p => p.Team == team.Id && p.Element_Type == positionIndex);
         }
 
         public async Task<int> TimesPlayerHasBeenInDreamTeamAsync(string playerName)
@@ -111,7 +128,7 @@ namespace ProjectA.Services.Statistics
             {
                 return -1;
             }
-            return player.DreamTeamCount;
+            return player.Dreamteam_Count;
         }
 
         public async Task<IEnumerable<PlayerDreamTeamData>> PlayersInDreamTeamOfTeamAsync(string teamName)
@@ -124,12 +141,12 @@ namespace ProjectA.Services.Statistics
 
             IEnumerable<Element> playerData = await this._playersRepository.GetAllPlayersAsync();
             var players = playerData
-                .Where(p => p.CurrentTeam == team.Id && p.DreamTeamCount > 0)
+                .Where(p => p.Team == team.Id && p.Dreamteam_Count > 0)
                 .Select(p => new PlayerDreamTeamData 
                 {
-                    DreamTeamCount = p.DreamTeamCount, 
-                    PlayerPosition = p.GamePositionName, 
-                    PlayerName = KeyBuilder.Build(p.FirstName, p.LastName)
+                    DreamTeamCount = p.Dreamteam_Count, 
+                    PlayerPosition = this.GetPositionName(p.Element_Type), 
+                    PlayerName = KeyBuilder.Build(p.First_Name, p.Second_Name)
                 });
 
             return players;

@@ -22,7 +22,7 @@ namespace ProjectA.Repositories.PlayersRepository
         public async Task<Element> GetPlayerDataAsync(string playerName)
         {
             var allPlyers = await GetAllPlayersAsync();
-            return allPlyers.FirstOrDefault(p => KeyBuilder.Build(p.FirstName, p.LastName) == playerName);
+            return allPlyers.FirstOrDefault(p => KeyBuilder.Build(p.First_Name, p.Second_Name) == playerName);
         }
 
         public async Task<IEnumerable<Element>> GetAllPlayersAsync()

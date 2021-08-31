@@ -8,135 +8,57 @@ namespace ProjectA.Models.PlayersModels
 		public int Id { get; set; }
 
 		[JsonProperty("first_name")]
-		public string FirstName { get; set; }
+		public string First_Name { get; set; }
 
 		[JsonProperty("second_name")]
-		public string LastName { get; set; }
+		public string Second_Name { get; set; }
 
 		[JsonProperty("element_type")]
-		public int GamePositionIndex 
-		{
-            get
-            {
-				return GamePositionIndex;
-            }
-
-            set
-            {
-				GamePositionIndex = value;
-				switch (value)
-				{
-					case 1:
-						GamePositionName = "Goalkeeper";
-						break;
-					case 2:
-						GamePositionName = "Defender";
-						break;
-					case 3:
-						GamePositionName = "Midfielder";
-						break;
-					case 4:
-						GamePositionName = "Forward";
-						break;
-					default:
-						GamePositionName = "Wrong index";
-						break;
-				}
-			}
-		}
-
-		[JsonIgnore]
-		public string GamePositionName { get; set; }
+		public int Element_Type { get; set; }
 
 		[JsonProperty("minutes")]
-		public int MinutesInPlay { get; set; }
+		public int Minutes { get; set; }
 
 		[JsonProperty("team")]
-		public int CurrentTeam { get; set; }
+		public int Team { get; set; }
 
 		[JsonProperty("goals_scored")]
-		public int GoalsScored { get; set; }
+		public int Goals_Scored { get; set; }
 
 		[JsonProperty("assists")]
 		public int Assists { get; set; }
 
 		[JsonProperty("yellow_cards")]
-		public int YellowCards { get; set; }
+		public int Yellow_Cards { get; set; }
 
 		[JsonProperty("red_cards")]
-		public int RedCards { get; set; }
+		public int Red_Cards { get; set; }
 
 		[JsonProperty("form")]
-		private string FormStr
-        {
-            set
-            {
-				Form = double.Parse(value);
-			}
-        }
-
-		[JsonIgnore]
-		public double Form { get; set; }
+		public string Form { get; set; }
 
 		[JsonProperty("points_per_game")]
-		private string PointsPerGameStr 
-		{
-            set
-            {
-				PointsPerGame = double.Parse(value);
-            }
-		}
-
-		[JsonIgnore]
-		public double PointsPerGame  { get; set; }
+		public string Points_Per_Game { get; set; }
 
 		[JsonProperty("total_points")]
-		public int TotalPoints { get; set; }
+		public int Total_Points { get; set; }
 
 		[JsonProperty("influence_rank_type")]
-		private string InfluenceStr 
-		{
-            set
-            {
-				Influence = int.Parse(value);
-            }
-		}
-
-		[JsonIgnore]
-		public int Influence { get; set; }
+		public int Influence_Rank_Type { get; set; }
 
 		[JsonProperty("creativity_rank_type")]
-		private string CreativityStr 
-		{
-            set
-            {
-				Creativity = int.Parse(value);
-
-			}
-		}
-
-		[JsonIgnore]
-		public int Creativity { get; set; }
+		public int Creativity_Rank_Type { get; set; }
 
 		[JsonProperty("threat_rank_type")]
-		private string ThreatStr 
-		{
-            set
-            {
-				Threat = int.Parse(value);
-            }
-		}
-
-		[JsonIgnore]
-		public int Threat { get; set; }
+		public int Threat_Rank_Type { get; set; }
 
 		[JsonProperty("ict_index_rank_type")]
-		public int IndexRank { get; set; }
+		public int Ict_Index_Rank_Type { get; set; }
 
 		[JsonProperty("now_cost")]
-		public int Price { get; set; }
-		
+		public int Now_Cost { get; set; }
+
 		[JsonProperty("dreamteam_count")]
-		public int DreamTeamCount { get; set; }
-    }
+		public int Dreamteam_Count { get; set; }
+	}
 }
