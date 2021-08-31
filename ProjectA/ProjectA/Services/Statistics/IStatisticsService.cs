@@ -7,10 +7,14 @@ namespace ProjectA.Services.Statistics
 {
     interface IStatisticsService
     {
-        public Task<IEnumerable<Tuple<int, string>>> GetTopScorers(int toPlace);
+        public Task<IEnumerable<Tuple<int, string>>> GetTopScorersAsync(int toPlace);
 
         public Task<IEnumerable<Tuple<int, string>>> GetTopScorersInATeamAsync(string teamName, int toPlace);
 
-        public Task<IEnumerable<Element>> GetPLayersOfPositionInTeam(string teamName, string position);
+        public Task<IEnumerable<Element>> GetPLayersOfPositionInTeamAsync(string teamName, string position);
+
+        public Task<int> TimesPlayerHasBeenInDreamTeamAsync(string playerName);
+
+        public Task<IEnumerable<Tuple<int, string, string>>> PlayersInDreamTeamOfTeamAsync(string teamName);
     }
 }

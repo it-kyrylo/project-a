@@ -103,5 +103,8 @@ namespace ProjectA.Models.PlayersModels
 
 		[JsonProperty("now_cost")]
 		public int Price { get; set; }
+		
+		[JsonProperty("dreamteam_count")]
+		public int DreamTeamCount { get; set; }
     }
 }

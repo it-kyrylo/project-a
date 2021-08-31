@@ -58,10 +58,14 @@ namespace ProjectA.Services.Statistics
         public async Task<Tuple<Element, string>> GetPayerData(string playerName)
         {
             Element player = await this._playersRepository.GetPlayerDataAsync(playerName);
+            if(player == null)
+            {
+                return null;
+            }
             return new Tuple<Element, string>(player, this.GetPositionName(player.GamePosition));
         }
 
-        public async Task<IEnumerable<Tuple<int, string>>> GetTopScorers(int toPlace)
+        public async Task<IEnumerable<Tuple<int, string>>> GetTopScorersAsync(int toPlace)
         {
             IEnumerable<Element> playerData = await this._playersRepository.GetAllPlayersAsync();
             var scores = playerData
@@ -97,7 +101,7 @@ namespace ProjectA.Services.Statistics
             return scores.Take(toPlace);
         }
 
-        public async Task<IEnumerable<Element>> GetPLayersOfPositionInTeam(string teamName, string position)
+        public async Task<IEnumerable<Element>> GetPLayersOfPositionInTeamAsync(string teamName, string position)
         {
             int positionIndex = this.GetPositionIndex(position);
             Team team = await this._teamsRepository.GetTeamByNameAsync(teamName);
@@ -107,6 +111,32 @@ namespace ProjectA.Services.Statistics
             }
 
             return this._playersRepository.GetAllPlayersAsync().Result.Where(p => p.CurrentTeam == team.Id && p.GamePosition == positionIndex);
+        }
+
+        public async Task<int> TimesPlayerHasBeenInDreamTeamAsync(string playerName)
+        {
+            Element player = await this._playersRepository.GetPlayerDataAsync(playerName);
+            if (player == null)
+            {
+                return -1;
+            }
+            return player.DreamTeamCount;
+        }
+
+        public async Task<IEnumerable<Tuple<int, string, string>>> PlayersInDreamTeamOfTeamAsync(string teamName)
+        {
+            Team team = await this._teamsRepository.GetTeamByNameAsync(teamName);
+            if (team == null)
+            {
+                return null;
+            }
+
+            IEnumerable<Element> playerData = await this._playersRepository.GetAllPlayersAsync();
+            var players = playerData
+                .Where(p => p.CurrentTeam == team.Id && p.DreamTeamCount > 0)
+                .Select(p => new Tuple<int, string, string>(p.DreamTeamCount, this.GetPositionName(p.GamePosition), KeyBuilder.Build(p.FirstName, p.LastName)));
+
+            return players;
         }
     }
 }
