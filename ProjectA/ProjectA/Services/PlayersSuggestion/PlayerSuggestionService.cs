@@ -38,7 +38,7 @@ namespace ProjectA.Services.PlayersSuggestion
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
-                    (PlayerPosition)p.GamePosition == playerPosition &&
+                    (PlayerPosition)p.GamePositionIndex == playerPosition &&
                     p.Price >= minPrice &&
                     p.Price <= maxPrice)
                 .OrderByDescending(p => p.PointsPerGame)
@@ -76,7 +76,7 @@ namespace ProjectA.Services.PlayersSuggestion
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
-                    (PlayerPosition)p.GamePosition == playerPosition &&
+                    (PlayerPosition)p.GamePositionIndex == playerPosition &&
                     p.Price >= minPrice &&
                     p.Price <= maxPrice)
                 .Select(p => new PlayerSpecificStatsModel
@@ -112,7 +112,7 @@ namespace ProjectA.Services.PlayersSuggestion
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
-                    (PlayerPosition)p.GamePosition == playerPosition &&
+                    (PlayerPosition)p.GamePositionIndex == playerPosition &&
                     p.Price >= minPrice &&
                     p.Price <= maxPrice)
                 .Select(p => new PlayerSpecificStatsModel
@@ -148,7 +148,7 @@ namespace ProjectA.Services.PlayersSuggestion
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
-                    (PlayerPosition)p.GamePosition == playerPosition &&
+                    (PlayerPosition)p.GamePositionIndex == playerPosition &&
                     p.Price >= minPrice &&
                     p.Price <= maxPrice)
                 .Select(p => new PlayerSpecificStatsModel
@@ -184,7 +184,7 @@ namespace ProjectA.Services.PlayersSuggestion
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
-                    (PlayerPosition)p.GamePosition == playerPosition &&
+                    (PlayerPosition)p.GamePositionIndex == playerPosition &&
                     p.Price >= minPrice &&
                     p.Price <= maxPrice)
                 .Select(p => new PlayerOverallStatsModel
@@ -211,8 +211,8 @@ namespace ProjectA.Services.PlayersSuggestion
 
         private static bool IsPriceRangeValid(double minPrice, double maxPrice)
         {
-            if (minPrice <= UsualFPLPlayerMinPrice || 
-                minPrice >= maxPrice || 
+            if (minPrice <= UsualFPLPlayerMinPrice ||
+                minPrice >= maxPrice ||
                 maxPrice >= UsualFPLPlayerMaxPrice)
             {
                 return false;
@@ -228,4 +228,3 @@ namespace ProjectA.Services.PlayersSuggestion
         }
     }
 }
-
