@@ -12,10 +12,10 @@ namespace ProjectA.Services.PlayersSuggestion
     public class PlayerSuggestionService : IPlayerSuggestionService
     {
         private const int SuggestedPlayersCount = 5;
+        private const double DoubleDivisor = 1.0;
         private const double PriceDivisor = 10.0;
         private const double UsualFPLPlayerMinPrice = 3.7;
         private const double UsualFPLPlayerMaxPrice = 14.1;
-
         private readonly IPlayersRepository players;
 
         public PlayerSuggestionService(IPlayersRepository players)
@@ -38,25 +38,24 @@ namespace ProjectA.Services.PlayersSuggestion
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
-                    (PlayerPosition)p.GamePositionIndex == playerPosition &&
-                    p.Price >= minPrice &&
-                    p.Price <= maxPrice)
-                .OrderByDescending(p => p.PointsPerGame)
-                .ThenBy(p => p.Price)
+                    (PlayerPosition)p.Element_Type == playerPosition &&
+                    p.Now_Cost >= minPrice &&
+                    p.Now_Cost <= maxPrice)
+                .OrderByDescending(p => double.Parse(p.Points_Per_Game))
+                .ThenBy(p => p.Now_Cost)
+                .Take(SuggestedPlayersCount)
                 .Select(p => new PlayerSpecificStatsModel
                 {
                     Id = p.Id,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
+                    FirstName = p.First_Name,
+                    LastName = p.Second_Name,
                     Position = playerPosition.ToString(),
-                    PointsPerGame = p.PointsPerGame,
-                    Price = p.Price / PriceDivisor,
-                    Form = p.Form,
-                    TotalPoints = p.TotalPoints,
-                    InfluenceCreativityThreatRank = p.IndexRank
-                })
-                .Take(SuggestedPlayersCount);
-
+                    PointsPerGame = double.Parse(p.Points_Per_Game),
+                    Price = p.Now_Cost / PriceDivisor,
+                    Form = double.Parse(p.Form),
+                    TotalPoints = p.Total_Points,
+                    InfluenceCreativityThreatRank = p.Ict_Index_Rank_Type
+                });
 
             return suggestedPlayers;
         }
@@ -76,23 +75,23 @@ namespace ProjectA.Services.PlayersSuggestion
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
-                    (PlayerPosition)p.GamePositionIndex == playerPosition &&
-                    p.Price >= minPrice &&
-                    p.Price <= maxPrice)
+                    (PlayerPosition)p.Element_Type == playerPosition &&
+                    p.Now_Cost >= minPrice &&
+                    p.Now_Cost <= maxPrice)
+                .OrderByDescending(p => double.Parse(p.Form))
+                .Take(SuggestedPlayersCount)
                 .Select(p => new PlayerSpecificStatsModel
                 {
                     Id = p.Id,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
+                    FirstName = p.First_Name,
+                    LastName = p.Second_Name,
                     Position = playerPosition.ToString(),
-                    PointsPerGame = p.PointsPerGame,
-                    Price = p.Price / PriceDivisor,
-                    Form = p.Form,
-                    TotalPoints = p.TotalPoints,
-                    InfluenceCreativityThreatRank = p.IndexRank
-                })
-                .OrderByDescending(p => p.Form)
-                .Take(SuggestedPlayersCount);
+                    PointsPerGame = double.Parse(p.Points_Per_Game),
+                    Price = p.Now_Cost / PriceDivisor,
+                    Form = double.Parse(p.Form),
+                    TotalPoints = p.Total_Points,
+                    InfluenceCreativityThreatRank = p.Ict_Index_Rank_Type
+                });
 
             return suggestedPlayers;
         }
@@ -112,23 +111,23 @@ namespace ProjectA.Services.PlayersSuggestion
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
-                    (PlayerPosition)p.GamePositionIndex == playerPosition &&
-                    p.Price >= minPrice &&
-                    p.Price <= maxPrice)
+                    (PlayerPosition)p.Element_Type == playerPosition &&
+                    p.Now_Cost >= minPrice &&
+                    p.Now_Cost <= maxPrice)
+                .OrderBy(p => p.Ict_Index_Rank_Type)
+                .Take(SuggestedPlayersCount)
                 .Select(p => new PlayerSpecificStatsModel
                 {
                     Id = p.Id,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
+                    FirstName = p.First_Name,
+                    LastName = p.Second_Name,
                     Position = playerPosition.ToString(),
-                    PointsPerGame = p.PointsPerGame,
-                    Price = p.Price / PriceDivisor,
-                    Form = p.Form,
-                    TotalPoints = p.TotalPoints,
-                    InfluenceCreativityThreatRank = p.IndexRank
-                })
-                .OrderBy(p => p.InfluenceCreativityThreatRank)
-                .Take(SuggestedPlayersCount);
+                    PointsPerGame = double.Parse(p.Points_Per_Game),
+                    Price = p.Now_Cost / PriceDivisor,
+                    Form = double.Parse(p.Form),
+                    TotalPoints = p.Total_Points,
+                    InfluenceCreativityThreatRank = p.Ict_Index_Rank_Type
+                });
 
             return suggestedPlayers;
         }
@@ -148,23 +147,23 @@ namespace ProjectA.Services.PlayersSuggestion
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
-                    (PlayerPosition)p.GamePositionIndex == playerPosition &&
-                    p.Price >= minPrice &&
-                    p.Price <= maxPrice)
+                    (PlayerPosition)p.Element_Type == playerPosition &&
+                    p.Now_Cost >= minPrice &&
+                    p.Now_Cost <= maxPrice)
+                .OrderByDescending(p => p.Total_Points * DoubleDivisor / p.Now_Cost)
+                .Take(SuggestedPlayersCount)
                 .Select(p => new PlayerSpecificStatsModel
                 {
                     Id = p.Id,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
+                    FirstName = p.First_Name,
+                    LastName = p.Second_Name,
                     Position = playerPosition.ToString(),
-                    PointsPerGame = p.PointsPerGame,
-                    Price = p.Price / PriceDivisor,
-                    Form = p.Form,
-                    TotalPoints = p.TotalPoints,
-                    InfluenceCreativityThreatRank = p.IndexRank
-                })
-                .OrderByDescending(p => p.TotalPoints * 1.0 / p.Price)
-                .Take(SuggestedPlayersCount);
+                    PointsPerGame = double.Parse(p.Points_Per_Game),
+                    Price = p.Now_Cost / PriceDivisor,
+                    Form = double.Parse(p.Form),
+                    TotalPoints = p.Total_Points,
+                    InfluenceCreativityThreatRank = p.Ict_Index_Rank_Type
+                });
 
             return suggestedPlayers;
         }
@@ -184,21 +183,21 @@ namespace ProjectA.Services.PlayersSuggestion
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
-                    (PlayerPosition)p.GamePositionIndex == playerPosition &&
-                    p.Price >= minPrice &&
-                    p.Price <= maxPrice)
+                    (PlayerPosition)p.Element_Type == playerPosition &&
+                    p.Now_Cost >= minPrice &&
+                    p.Now_Cost <= maxPrice)
+                .OrderByDescending(p => (double.Parse(p.Form) + double.Parse(p.Points_Per_Game)) - p.Ict_Index_Rank_Type)
+                .ThenBy(p => p.Now_Cost)
+                .Take(SuggestedPlayersCount)
                 .Select(p => new PlayerOverallStatsModel
                 {
                     Id = p.Id,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
+                    FirstName = p.First_Name,
+                    LastName = p.Second_Name,
                     Position = playerPosition.ToString(),
-                    Price = p.Price / PriceDivisor,
-                    OverallStats = (p.Form + p.PointsPerGame) - p.IndexRank
-                })
-                .OrderByDescending(p => p.OverallStats)
-                .ThenBy(p => p.Price)
-                .Take(SuggestedPlayersCount);
+                    Price = p.Now_Cost / PriceDivisor,
+                    OverallStats = (double.Parse(p.Form) + double.Parse(p.Points_Per_Game)) - p.Ict_Index_Rank_Type
+                });
 
             return suggestedPlayers;
         }
