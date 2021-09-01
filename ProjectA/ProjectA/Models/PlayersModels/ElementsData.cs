@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjectA.Models.PlayersModels
 {
-    public class PlayersData
+    public class ElementsData
     {
         public List<Element> Elements { get; set; }
     }
