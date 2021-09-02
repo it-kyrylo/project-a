@@ -32,8 +32,10 @@ namespace ProjectA.Services.Teams
                 .OrderByDescending(sa=>sa.StrengthAway)
                 .ThenByDescending(s=>s.Strength);
 
+            var team = strongestTeamAway.First();
             
-            return _mapper.Map<TeamServiceModel>(strongestTeamAway);
+
+            return _mapper.Map<TeamServiceModel>(team);
         }
 
         public async Task<TeamServiceModel> GetStrongestTeamHomeAsync()
@@ -44,8 +46,10 @@ namespace ProjectA.Services.Teams
                 .OrderByDescending(sh=>sh.StrengthHome)
                 .ThenByDescending(s=>s.Strength);
 
-            
-            return _mapper.Map<TeamServiceModel>(strongestTeamHome);
+            var team = strongestTeamHome.First();
+
+
+            return _mapper.Map<TeamServiceModel>(team);
         }
 
         public async Task<IEnumerable<TeamServiceModel>> GetTopThreeStrongestTeamsAsync()
