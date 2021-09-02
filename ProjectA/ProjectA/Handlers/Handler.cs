@@ -1,10 +1,7 @@
-﻿using ProjectA.Models.PlayersModels;
-using ProjectA.Services.Handlers;
+﻿using ProjectA.Services.Handlers;
 using ProjectA.Services.PlayersSuggestion;
 using ProjectA.Services.Statistics;
-using ProjectA.Services.Teams;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -30,7 +27,7 @@ namespace ProjectA.Handlers
             _statisticsService = statisticsService;
         }
 
-        public Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        public  Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
             var ErrorMessage = exception switch
             {
@@ -69,7 +66,7 @@ namespace ProjectA.Handlers
             }
         }
 
-        private async Task BotOnMessageReceived(ITelegramBotClient botClient, Message message)
+        private static async Task BotOnMessageReceived(ITelegramBotClient botClient, Message message)
         {
             if (message.Type != MessageType.Text)
                 return;
@@ -180,7 +177,7 @@ namespace ProjectA.Handlers
         }
 
         // Process Inline Keyboard callback data
-        private async Task BotOnCallbackQueryReceived(ITelegramBotClient botClient, CallbackQuery callbackQuery)
+        private  async Task BotOnCallbackQueryReceived(ITelegramBotClient botClient, CallbackQuery callbackQuery)
         {
             var result = new StringBuilder();
             if (callbackQuery.Data == "Team Statistics")
@@ -191,8 +188,6 @@ namespace ProjectA.Handlers
                 await botClient.SendTextMessageAsync(chatId: callbackQuery.Message.Chat.Id, await TeamsMenuFunctions(callbackQuery, botClient));
            
             
-
-
           
 
             await botClient.SendTextMessageAsync(
@@ -200,7 +195,7 @@ namespace ProjectA.Handlers
                 text: $"{result.ToString()}");
         }
 
-        private async Task<string> TeamsMenuFunctions(CallbackQuery callbackQuery, ITelegramBotClient botClient)
+        private  async Task<string> TeamsMenuFunctions(CallbackQuery callbackQuery, ITelegramBotClient botClient)
         {
 
 
@@ -219,6 +214,7 @@ namespace ProjectA.Handlers
                 "Strongest Team Away"  => await _handlerTeamService.GetStrongestTeamAwayAsync()
 
             };
+
             return result;
 
         }
