@@ -13,8 +13,6 @@ using Refit;
 using System;
 using Telegram.Bot;
 using ProjectA.Handlers;
-using System.Threading;
-using Telegram.Bot.Extensions.Polling;
 using ProjectA.Services.Statistics;
 using ProjectA.Services.Handlers;
 
@@ -40,9 +38,11 @@ namespace ProjectA
             services.AddScoped<IPlayersRepository, PlayersRepository>();
             services.AddScoped<IPlayerSuggestionService, PlayerSuggestionService>();
             services.AddScoped<IStatisticsService, StatisticsService>();
-            services.AddScoped<IHandlerTeamService, HandlerTeamService>();
-            services.AddScoped<Handler, Handler>();
-            services.AddTelegramBotClient(Configuration);
+            services.AddScoped<IHandlerTeamService, HandlerTeamService>();         
+            services.AddScoped<ITelegramUpdateHandler, TelegramHandler>();
+
+            services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(Configuration["TelegramBotToken"]));
+          
             services.AddControllers();
             services.AddRefitClient<IFantasyPremierLeagueClient>()
                     .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetSection("FantasyPremierLeagueUrl").Value));
@@ -52,14 +52,10 @@ namespace ProjectA
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProjectA", Version = "v1" });
             });
 
-            
-
-           
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,Handler handler,ITelegramBotClient botClient)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -78,13 +74,7 @@ namespace ProjectA
             {
                 endpoints.MapControllers();
             });
-
-            
-            var source = new CancellationTokenSource();
-
-            botClient.StartReceiving(new DefaultUpdateHandler(handler.HandleUpdateAsync, handler.HandleErrorAsync), source.Token);
-            
-        }
-        
+  
+        }      
     }
 }
