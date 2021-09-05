@@ -20,11 +20,8 @@ namespace ProjectA
                     webBuilder.UseStartup<Startup>();
                 })          
             .ConfigureServices(services =>
-            {
-                var Configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
-                
-                services.AddHostedService<TelegramBotHostedService>();
-                
+            {     
+                services.AddHostedService<TelegramBotHostedService>();              
             });
           
     }
