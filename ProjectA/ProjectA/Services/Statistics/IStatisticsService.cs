@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjectA.Services.Statistics
 {
-    interface IStatisticsService
+    public interface IStatisticsService
     {
         public Task<Element> GetPayerData(string playerName);
         public Task<IEnumerable<ScorersData>> GetTopScorersAsync(int toPlace);

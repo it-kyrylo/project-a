@@ -77,9 +77,13 @@ namespace ProjectA.Services.Statistics
                     ScoredGoals = p.Goals_Scored
                 });
 
-            if (toPlace >= scores.Count() || toPlace < 0)
+            if (toPlace >= scores.Count())
             {
                 return scores;
+            }
+            else if (toPlace <= 0)
+            {
+                return null;
             }
             return scores.Take(toPlace);
         }
@@ -102,9 +106,13 @@ namespace ProjectA.Services.Statistics
                     ScoredGoals = p.Goals_Scored
                 }); 
 
-            if (toPlace >= scores.Count() || toPlace < 0)
+            if (toPlace >= scores.Count())
             {
                 return scores;
+            }
+            else if(toPlace <= 0)
+            {
+                return null;
             }
             return scores.Take(toPlace);
         }
