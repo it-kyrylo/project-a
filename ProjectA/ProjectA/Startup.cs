@@ -17,6 +17,7 @@ using ProjectA.Services.Statistics;
 using ProjectA.Services.Handlers;
 using ProjectA.Services.StateProvider;
 using System.Threading.Tasks;
+using ProjectA.Factory;
 
 namespace ProjectA
 {
@@ -41,6 +42,7 @@ namespace ProjectA
             services.AddTransient<IPlayerSuggestionService, PlayerSuggestionService>();
             services.AddTransient<IStatisticsService, StatisticsService>();
             services.AddTransient<IHandlerTeamService, HandlerTeamService>();
+            services.AddTransient<IStateFactory, StateFactory>();
             
             services.AddSingleton<ITelegramUpdateHandler, TelegramHandler>();
             services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(Configuration["TelegramBotToken"]));
