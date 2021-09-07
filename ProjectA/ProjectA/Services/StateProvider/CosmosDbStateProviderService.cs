@@ -48,7 +48,7 @@ namespace ProjectA.Services.StateProvider
 
         public async Task<ChatState> GetChatStateAsync(long Chat_Id)
         {
-            var response = await this.GetContainerItemAsync(Chat_Id);
+            ChatState response = await this.GetContainerItemAsync(Chat_Id);
             return response;
         }
 
