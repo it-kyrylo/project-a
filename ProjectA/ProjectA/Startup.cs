@@ -7,18 +7,20 @@ using Microsoft.OpenApi.Models;
 using ProjectA.Clients;
 using ProjectA.Repositories.Teams;
 using ProjectA.Services.Teams;
-using ProjectA.Repositories;
 using ProjectA.Repositories.PlayersRepository;
 using ProjectA.Services.PlayersSuggestion;
 using Refit;
 using System;
-using ProjectA.Services.StateProvider;
-using System.Threading.Tasks;
+using Telegram.Bot;
+using ProjectA.Handlers;
+using ProjectA.Services.Statistics;
+using ProjectA.Services.Handlers;
 
 namespace ProjectA
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,20 +32,26 @@ namespace ProjectA
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
-            services.AddScoped<ITeamRepository, TeamRepository>();
-            services.AddScoped<ITeamService, TeamService>();
+
+            services.AddTransient<ITeamRepository, TeamRepository>();
+            services.AddTransient<ITeamService, TeamService>();
+            services.AddTransient<IPlayersRepository, PlayersRepository>();
+            services.AddTransient<IPlayerSuggestionService, PlayerSuggestionService>();
+            services.AddTransient<IStatisticsService, StatisticsService>();
+            services.AddTransient<IHandlerTeamService, HandlerTeamService>();
+            
+            services.AddSingleton<ITelegramUpdateHandler, TelegramHandler>();
+            services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(Configuration["TelegramBotToken"]));
+          
             services.AddControllers();
             services.AddRefitClient<IFantasyPremierLeagueClient>()
                     .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetSection("FantasyPremierLeagueUrl").Value));
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProjectA", Version = "v1" });
             });
 
-            services.AddScoped<IPlayersRepository, PlayersRepository>();
-            services.AddScoped<IPlayerSuggestionService, PlayerSuggestionService>();
-
-            services.AddSingleton<ICosmosDbStateProviderService>(InitializeCosmosClientInstanceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,20 +74,7 @@ namespace ProjectA
             {
                 endpoints.MapControllers();
             });
-        }
-
-        private static async Task<CosmosDbStateProviderService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
-        {
-            var databaseName = configurationSection["DatabaseName"];
-            var containerName = configurationSection["ContainerName"];
-            var account = configurationSection["Account"];
-            var key = configurationSection["Key"];
-
-            var client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
-            var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
-            await database.Database.CreateContainerIfNotExistsAsync(containerName, "/chat_id");
-            var cosmosDbService = new CosmosDbStateProviderService(client, databaseName, containerName);
-            return cosmosDbService;
-        }
+  
+        }      
     }
 }
