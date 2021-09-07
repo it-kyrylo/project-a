@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace ProjectA.Models
+namespace ProjectA.Helpers
 {
     public static class InteractionHelper
     {
