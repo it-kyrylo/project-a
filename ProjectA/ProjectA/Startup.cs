@@ -15,6 +15,8 @@ using Telegram.Bot;
 using ProjectA.Handlers;
 using ProjectA.Services.Statistics;
 using ProjectA.Services.Handlers;
+using ProjectA.Services.StateProvider;
+using System.Threading.Tasks;
 
 namespace ProjectA
 {
@@ -52,6 +54,7 @@ namespace ProjectA
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProjectA", Version = "v1" });
             });
 
+            services.AddSingleton<ICosmosDbStateProviderService>(InitializeCosmosClientInstanceAsync(Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,6 +78,20 @@ namespace ProjectA
                 endpoints.MapControllers();
             });
   
-        }      
+        }
+
+        private static async Task<CosmosDbStateProviderService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
+        {
+            var databaseName = configurationSection["DatabaseName"];
+            var containerName = configurationSection["ContainerName"];
+            var account = configurationSection["Account"];
+            var key = configurationSection["Key"];
+
+            var client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
+            var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
+            await database.Database.CreateContainerIfNotExistsAsync(containerName, "/chat_id");
+            var cosmosDbService = new CosmosDbStateProviderService(client, databaseName, containerName);
+            return cosmosDbService;
+        }
     }
 }
