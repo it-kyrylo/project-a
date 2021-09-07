@@ -33,14 +33,14 @@ namespace ProjectA
         {
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddScoped<ITeamRepository, TeamRepository>();
-            services.AddScoped<ITeamService, TeamService>();
-            services.AddScoped<IPlayersRepository, PlayersRepository>();
-            services.AddScoped<IPlayerSuggestionService, PlayerSuggestionService>();
-            services.AddScoped<IStatisticsService, StatisticsService>();
-            services.AddScoped<IHandlerTeamService, HandlerTeamService>();         
-            services.AddScoped<ITelegramUpdateHandler, TelegramHandler>();
-
+            services.AddTransient<ITeamRepository, TeamRepository>();
+            services.AddTransient<ITeamService, TeamService>();
+            services.AddTransient<IPlayersRepository, PlayersRepository>();
+            services.AddTransient<IPlayerSuggestionService, PlayerSuggestionService>();
+            services.AddTransient<IStatisticsService, StatisticsService>();
+            services.AddTransient<IHandlerTeamService, HandlerTeamService>();
+            
+            services.AddSingleton<ITelegramUpdateHandler, TelegramHandler>();
             services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(Configuration["TelegramBotToken"]));
           
             services.AddControllers();
