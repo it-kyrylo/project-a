@@ -7,10 +7,10 @@ namespace ProjectA.States
 {
     public interface IState
     {
-        Task<StateTypes> BotOnMessageReceived(ITelegramBotClient botClient, Message message);
+        Task<StateType> BotOnMessageReceived(ITelegramBotClient botClient, Message message);
 
-        Task<StateTypes> BotOnCallBackQueryReceived(ITelegramBotClient botClient, CallbackQuery callbackQuery);
+        Task<StateType> BotOnCallBackQueryReceived(ITelegramBotClient botClient, CallbackQuery callbackQuery);
 
-        void BotSendMessage(ITelegramBotClient botClient, long chatId);
+        Task BotSendMessage(ITelegramBotClient botClient, long chatId);
     }
 }

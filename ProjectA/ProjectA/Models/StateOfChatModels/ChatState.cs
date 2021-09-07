@@ -1,11 +1,19 @@
 ﻿using Newtonsoft.Json;
 using ProjectA.Models.StateOfChatModels.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjectA.Models.StateOfChatModels
 {
     public class ChatState
     {
+        public ChatState(long chatId, StateType state = StateType.MainState)
+        {
+            Id = Guid.NewGuid().ToString();
+            Chat_Id = chatId;
+            Current_State = state;
+        }
+
         [JsonProperty("id")]
         public string Id { get; set; }
 
@@ -15,6 +23,6 @@ namespace ProjectA.Models.StateOfChatModels
 
         [Required]
         [JsonProperty("current_state")]
-        public StateTypes Current_State { get; set; }
+        public StateType Current_State { get; set; }
     }
 }

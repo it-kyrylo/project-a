@@ -1,6 +1,5 @@
 ﻿using Microsoft.Azure.Cosmos;
 using ProjectA.Models.StateOfChatModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ namespace ProjectA.Services.StateProvider
 {
     public class CosmosDbStateProviderService : ICosmosDbStateProviderService
     {
-        private Container _container;
+        private readonly Container _container;
         public CosmosDbStateProviderService(CosmosClient cosmosDbClient, string databaseName, string containerName)
         {
             _container = cosmosDbClient.GetContainer(databaseName, containerName);
@@ -17,7 +16,7 @@ namespace ProjectA.Services.StateProvider
 
         private async Task<ChatState> GetContainerItemAsync(long Chat_Id)
         {
-            var sqlQueryText = "SELECT * FROM c WHERE c.Chat_Id = @Chat_Id";
+            var sqlQueryText = "SELECT * FROM c WHERE c.chat_id = @Chat_Id";
             QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText).WithParameter("@Chat_Id", Chat_Id);
             FeedIterator<ChatState> query = this._container.GetItemQueryIterator<ChatState>(queryDefinition);
 
@@ -28,7 +27,7 @@ namespace ProjectA.Services.StateProvider
                 results.AddRange(response.ToList());
             }
 
-            if(results.Count() != 0)
+            if (results.Count != 0)
             {
                 return results[0];
             }
@@ -48,8 +47,16 @@ namespace ProjectA.Services.StateProvider
 
         public async Task<ChatState> GetChatStateAsync(long Chat_Id)
         {
-            ChatState response = await this.GetContainerItemAsync(Chat_Id);
-            return response;
+            ChatState chat = await this.GetContainerItemAsync(Chat_Id);
+
+            if (chat == null)
+            {
+                chat = new ChatState(Chat_Id);
+
+                await AddChatStateAsync(chat);
+            }
+
+            return chat;
         }
 
         public async Task UpdateChatStateAsync(ChatState item)

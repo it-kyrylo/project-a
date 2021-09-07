@@ -1,6 +1,8 @@
-﻿using ProjectA.Models.PlayersModels;
+﻿using ProjectA.Factory;
+using ProjectA.Models.StateOfChatModels.Enums;
 using ProjectA.Services.Handlers;
 using ProjectA.Services.PlayersSuggestion;
+using ProjectA.Services.StateProvider;
 using ProjectA.Services.Statistics;
 using System;
 using System.Threading;
@@ -16,14 +18,17 @@ namespace ProjectA.Handlers
 {
     public class TelegramHandler : ITelegramUpdateHandler
     {
-        private readonly IPlayerSuggestionService _players;
-        private readonly IStatisticsService _statisticsService;
         private readonly IHandlerTeamService _handlerTeamService;
-        public TelegramHandler(IPlayerSuggestionService players, IStatisticsService statisticsService, IHandlerTeamService handlerTeamService)
+        private readonly ICosmosDbStateProviderService _stateProvider;
+        private readonly IStateFactory _stateFactory;
+        public TelegramHandler( 
+            IHandlerTeamService handlerTeamService,
+            ICosmosDbStateProviderService stateProvider, 
+            IStateFactory stateFactory)
         {
-            _players = players;
             _handlerTeamService = handlerTeamService;
-            _statisticsService = statisticsService;
+            _stateProvider = stateProvider;
+            _stateFactory = stateFactory;
         }
 
         public  Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
@@ -40,27 +45,36 @@ namespace ProjectA.Handlers
 
         public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
+            if (update.Message == null && update.CallbackQuery == null)
+            {
+                return;
+            }
+
+            var chatId = update.Message != null ? update.Message.Chat.Id : update.CallbackQuery.Message.Chat.Id;
+            var state =  _stateFactory.GetState(_stateProvider.GetChatStateAsync(chatId).Result.Current_State);
+
             var handler = update.Type switch
             {
-                UpdateType.Message => BotOnMessageReceived(botClient, update.Message),
-                UpdateType.EditedMessage => BotOnMessageReceived(botClient, update.EditedMessage),
-                UpdateType.CallbackQuery => BotOnCallbackQueryReceived(botClient, update.CallbackQuery),
-                UpdateType.InlineQuery => BotOnInlineQueryReceived(botClient, update.InlineQuery),
-                UpdateType.ChosenInlineResult => BotOnChosenInlineResultReceived(botClient, update.ChosenInlineResult),
-                _ => UnknownUpdateHandlerAsync(botClient, update)
+                UpdateType.Message => state.BotOnMessageReceived(botClient, update.Message).Result,
+                UpdateType.CallbackQuery => state.BotOnCallBackQueryReceived(botClient, update.CallbackQuery).Result,
+                _ => UnknownUpdateHandlerAsync(botClient, update).Result
             };
 
             try
             {
-                await handler;
+                var nextState = handler;
+                var chat = await _stateProvider.GetChatStateAsync(chatId);
+                chat.Current_State = nextState;
+                await _stateProvider.UpdateChatStateAsync(chat);
+                await _stateFactory.GetState(nextState).BotSendMessage(botClient, chatId);
             }
             catch (Exception exception)
             {
-                await HandleErrorAsync(botClient, exception, cancellationToken);
+                await HandleErrorAsync(botClient, exception, cancellationToken).ConfigureAwait(false);
             }
         }
 
-
+        //TODO: Delete after second interal demo
         private static async Task BotOnMessageReceived(ITelegramBotClient botClient, Message message)
         {
             if (message.Type != MessageType.Text)
@@ -87,8 +101,8 @@ namespace ProjectA.Handlers
             }
         }
 
-        // Process Inline Keyboard callback data
-        private  async Task BotOnCallbackQueryReceived(ITelegramBotClient botClient, CallbackQuery callbackQuery)
+        //TODO: Delete after second interal demo
+        private async Task BotOnCallbackQueryReceived(ITelegramBotClient botClient, CallbackQuery callbackQuery)
         {
 
             if (callbackQuery.Data=="Team Statistics")
@@ -107,6 +121,7 @@ namespace ProjectA.Handlers
                 text: $"{result}");
         }
 
+        //TODO: Delete after second interal demo
         static async Task<Message> SendBaseMenu(ITelegramBotClient botClient, Message message)
         {
             await botClient.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
@@ -135,6 +150,7 @@ namespace ProjectA.Handlers
                                                         replyMarkup: inlineKeyboard);
         }
 
+        //TODO: Delete after second interal demo
         static async Task<Message> SendInlineTeamMenu(ITelegramBotClient botClient, Message message)
         {
             await botClient.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
@@ -175,7 +191,8 @@ namespace ProjectA.Handlers
                                                         replyMarkup: inlineKeyboard);
 
         }
-        private  async Task<string> TeamsMenuFunctions(string callbackQueryData, ITelegramBotClient botClient)
+        //TODO: Delete after second interal demo
+        private async Task<string> TeamsMenuFunctions(string callbackQueryData, ITelegramBotClient botClient)
         {
 
             var result = callbackQueryData switch
@@ -197,6 +214,7 @@ namespace ProjectA.Handlers
             return result;
         }
 
+        //TODO: Delete after second interal demo
         private async Task BotOnInlineQueryReceived(ITelegramBotClient botClient, InlineQuery inlineQuery)
         {
             Console.WriteLine($"Received inline query from: {inlineQuery.From.Id}");
@@ -219,16 +237,18 @@ namespace ProjectA.Handlers
                 cacheTime: 0);
         }
 
+        //TODO: Delete after second interal demo
         private static Task BotOnChosenInlineResultReceived(ITelegramBotClient botClient, ChosenInlineResult chosenInlineResult)
         {
             Console.WriteLine($"Received inline result: {chosenInlineResult.ResultId}");
             return Task.CompletedTask;
         }
 
-        private static Task UnknownUpdateHandlerAsync(ITelegramBotClient botClient, Update update)
+        private Task<StateType> UnknownUpdateHandlerAsync(ITelegramBotClient botClient, Update update)
         {
-            Console.WriteLine($"Unknown update type: {update.Type}");
-            return Task.CompletedTask;
+            botClient.SendTextMessageAsync(update.Message.Chat.Id, "Something went wrong! Please try again");
+
+            return Task.Run(() => StateType.MainState);
         }
 
     }
