@@ -4,6 +4,13 @@
     {
         MainState,
         SuggestionsMenuState,
-        PlayersByOverallStatsState
+        PlayersByOverallStatsState,
+        StatisticsMenuState,
+        PlayerDataState,
+        TopScorersState,
+        TopScorersInTeamMenuState,
+        PLayersOfPositionInTeamState,
+        TimesPlayerHasBeenInDreamTeamState,
+        PlayersInDreamTeamOfTeamState
     }
 }
