@@ -23,7 +23,7 @@ namespace ProjectA.States
 
                 Suggestions.PlayersSuggestions => StateType.SuggestionsMenuState,
                 //Statistics.PlayersStatistics => StateType.GetSuggestion,
-                //Statistics.TeamStatistics => StateType.GetSuggestion,
+                TeamStatistics.Statistics => StateType.TeamsMenuState,
                 _ => await PrintMessage(botClient, message.Chat.Id, StateMessages.ChooseOptionMainState, StateType.MainState)
             };
         }
