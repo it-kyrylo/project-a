@@ -29,8 +29,6 @@
         {
             public const string PlayersStatistics = "/PlayersStatistics";
             public const string TeamStatistics = "/TeamsStatistics";
-        }
-
             public const string PlayersData = "Player's data";
             public const string TopScorersLeague = "Top scorers of the championship";
             public const string TopScorersTeam = "Top scorers in a team";

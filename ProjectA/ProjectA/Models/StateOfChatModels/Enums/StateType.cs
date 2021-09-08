@@ -9,6 +9,7 @@
         PlayersByFormState,
         PlayersByITCRank,
         PlayersByPointsPerPriceState,
+
         TeamsMenuState,
         TopThreeTeamsState,
         AllTeamsState,
@@ -16,8 +17,8 @@
         StrongestTeamAwayState,
         MostWinsTeamState,
         MostLossesTeamState,
-        SearchTeamState
-        PlayersByPointsPerPriceState,
+        SearchTeamState,
+
         StatisticsMenuState,
         PlayerDataState,
         TopScorersState,
