@@ -4,6 +4,10 @@
     {
         MainState,
         SuggestionsMenuState,
-        PlayersByOverallStatsState
+        PlayersByOverallStatsState,
+        PlayersByPointsPerGameState,
+        PlayersByFormState,
+        PlayersByITCRank,
+        PlayersByPointsPerPriceState
     }
 }

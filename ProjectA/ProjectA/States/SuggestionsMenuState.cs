@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
+using static ProjectA.States.StateConstants;
 
 namespace ProjectA.States
 {
@@ -26,41 +27,37 @@ namespace ProjectA.States
 
             return callbackQuery.Data switch
             {
-                //TODO: Add states for each suggestions criteria - e.g. "Points per game" and etc.
-                //TODO: Introduce StatesConstants class
-
-                "Points Per Game" => StateType.SuggestionsMenuState,
-                "Current Form" => StateType.SuggestionsMenuState,
-                "ITC Rank" => StateType.SuggestionsMenuState,
-                "Points Per Price" => StateType.SuggestionsMenuState,
-                "Overall stats" => StateType.PlayersByOverallStatsState,
-                "Back" or _ => MoveBack(callbackQuery.Message.Chat.Id)
+                Suggestions.PointsPerGameCriteria=> StateType.PlayersByPointsPerGameState,
+                Suggestions.CurrentFormCriteria => StateType.PlayersByFormState,
+                Suggestions.ITCRankCriteria => StateType.PlayersByITCRank,
+                Suggestions.PointsPerPriceCriteria => StateType.PlayersByPointsPerPriceState,
+                Suggestions.OverallStatsCriteria => StateType.PlayersByOverallStatsState,
+                Suggestions.BackToPreviousMenu or _ => MoveBack(callbackQuery.Message.Chat.Id)
             };
         }
 
         public async Task BotSendMessage(ITelegramBotClient botClient, long chatId)
         {
-            //TODO: Introduce StatesConstants class
             var options = new InlineKeyboardMarkup(new[]
             {
                 new [] 
                 { 
-                    InlineKeyboardButton.WithCallbackData("Points Per Game", "Points Per Game"),
-                    InlineKeyboardButton.WithCallbackData("Current Form", "Current Form")
+                    InlineKeyboardButton.WithCallbackData(Suggestions.PointsPerGameCriteria, Suggestions.PointsPerGameCriteria),
+                    InlineKeyboardButton.WithCallbackData(Suggestions.CurrentFormCriteria, Suggestions.CurrentFormCriteria)
                 },
                 new [] 
                 { 
-                    InlineKeyboardButton.WithCallbackData("ITC Rank", "ITC Rank"), 
-                    InlineKeyboardButton.WithCallbackData("Points Per Price", "Points Per Price") 
+                    InlineKeyboardButton.WithCallbackData(Suggestions.ITCRankCriteria, Suggestions.ITCRankCriteria), 
+                    InlineKeyboardButton.WithCallbackData(Suggestions.PointsPerPriceCriteria, Suggestions.PointsPerPriceCriteria) 
                 },
                 new [] 
                 {
-                    InlineKeyboardButton.WithCallbackData("Overall stats", "Overall stats"),
-                    InlineKeyboardButton.WithCallbackData("Back", "Back") 
+                    InlineKeyboardButton.WithCallbackData(Suggestions.OverallStatsCriteria, Suggestions.OverallStatsCriteria),
+                    InlineKeyboardButton.WithCallbackData(Suggestions.BackToPreviousMenu, Suggestions.BackToPreviousMenu) 
                 }
             });
 
-            var message = "To get 5 suggested players, please choose a criteria:";
+            var message = StateMessages.GetPlayersSuggestionMessage;
 
             await InteractionHelper.SendInlineKeyboard(botClient, chatId, message, options);
         }

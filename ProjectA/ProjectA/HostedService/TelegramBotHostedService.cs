@@ -9,7 +9,7 @@ using Telegram.Bot.Extensions.Polling;
 
 namespace ProjectA.HostedService
 {
-    public class TelegramBotHostedService :  IHostedService, IDisposable
+    public class TelegramBotHostedService :  IHostedService/*, IDisposable*/
     { 
       
         private readonly ITelegramBotClient _telegramBotClient;
@@ -36,10 +36,10 @@ namespace ProjectA.HostedService
             await _telegramBotClient.CloseAsync(cancellationToken);
         }
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+        //public void Dispose()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
       
     }
