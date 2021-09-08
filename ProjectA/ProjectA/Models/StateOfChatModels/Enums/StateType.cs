@@ -5,6 +5,11 @@
         MainState,
         SuggestionsMenuState,
         PlayersByOverallStatsState,
+        PlayersByPointsPerGameState,
+        PlayersByFormState,
+        PlayersByITCRank,
+        PlayersByPointsPerPriceState
+        PlayersByOverallStatsState,
         StatisticsMenuState,
         PlayerDataState,
         TopScorersState,

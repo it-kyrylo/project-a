@@ -1,8 +1,8 @@
-﻿
-using ProjectA.Models.StateOfChatModels.Enums;
+﻿using ProjectA.Models.StateOfChatModels.Enums;
 using ProjectA.Services.PlayersSuggestion;
 using ProjectA.Services.StateProvider;
 using ProjectA.States;
+using ProjectA.States.PlayersSuggestion;
 
 namespace ProjectA.Factory
 {
@@ -23,15 +23,14 @@ namespace ProjectA.Factory
             {
                 StateType.SuggestionsMenuState => new SuggestionsMenuState(stateProvider),
                 StateType.PlayersByOverallStatsState => new PlayersByOverallStatsState(stateProvider, players),
+                StateType.PlayersByFormState => new PlayersByFormState(stateProvider, players),
+                StateType.PlayersByPointsPerGameState => new PlayersByPointsPerGameState(stateProvider, players),
+                StateType.PlayersByITCRank => new PlayersByITCRank(stateProvider, players),
+                StateType.PlayersByPointsPerPriceState => new PlayersByPointsPerPriceState(stateProvider, players),
                 StateType.MainState or _ => (IState)new MainState(),
             };
 
             return result;
         }
-        //public IState GetVehicle(StateTypes state)
-        //{
-        //    throw new NotImplementedException();
-        //    // with a switch case the factory will return instance of a State classes we will create
-        //}
     }
 }

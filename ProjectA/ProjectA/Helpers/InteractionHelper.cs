@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using ProjectA.Models.StateOfChatModels.Enums;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -15,6 +18,19 @@ namespace ProjectA.Helpers
             return await botClient.SendTextMessageAsync(chatId: chatId,
                                                         text: prompt,
                                                         replyMarkup: options);
+        }
+
+        public static string[] ProcessUserInput(string userInput)
+               => userInput
+                   .Split('/', StringSplitOptions.RemoveEmptyEntries)
+                   .ToArray();
+
+        public static async Task<StateType> PrintMessage(ITelegramBotClient botClient, long chatId, string message)
+        {
+            await botClient.SendTextMessageAsync(chatId, message);
+
+            return StateType.PlayersByOverallStatsState;
+
         }
     }
 }

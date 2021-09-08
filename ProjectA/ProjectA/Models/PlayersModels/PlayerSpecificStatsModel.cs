@@ -1,4 +1,6 @@
-﻿namespace ProjectA.Models.PlayersModels
+﻿using System.Text;
+
+namespace ProjectA.Models.PlayersModels
 {
     public class PlayerSpecificStatsModel
     {
@@ -19,6 +21,21 @@
         public string Position { get; init; }
 
         public int InfluenceCreativityThreatRank { get; init; }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            sb
+                .AppendLine($"Name: {FirstName} {LastName}")
+                .AppendLine($"Price: {Price}")
+                .AppendLine($"Form: {Form}")
+                .AppendLine($"Points Per Game: {PointsPerGame}")
+                .AppendLine($"Total Points: {TotalPoints}")
+                .AppendLine($"Position: {Position.ToUpper()}");
+
+            return sb.ToString();
+        }
 
     }
 }
