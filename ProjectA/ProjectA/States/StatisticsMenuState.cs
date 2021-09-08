@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
+using static ProjectA.States.StateConstants;
 
 namespace ProjectA.States
 {
@@ -26,13 +27,13 @@ namespace ProjectA.States
 
             return callbackQuery.Data switch
             {
-                "Player's data" => StateType.PlayerDataState,
-                "Top scorers of the championship" => StateType.TopScorersState,
-                "Top scorers in a team" => StateType.TopScorersInTeamMenuState,
-                "Player in a team of position" => StateType.PLayersOfPositionInTeamState,
-                "Times player has been in dream team" => StateType.TimesPlayerHasBeenInDreamTeamState,
-                "Team's players in dream teams" => StateType.PlayersInDreamTeamOfTeamState,
-                "Back" or _ => MoveBack(callbackQuery.Message.Chat.Id)
+                Statistics.PlayersData => StateType.PlayerDataState,
+                Statistics.TopScorersLeague => StateType.TopScorersState,
+                Statistics.TopScorersTeam => StateType.TopScorersInTeamMenuState,
+                Statistics.PlayersInTeamFromPosition => StateType.PLayersOfPositionInTeamState,
+                Statistics.PlayerInDreamtem => StateType.TimesPlayerHasBeenInDreamTeamState,
+                Statistics.PlayersFromTeamInDreamteam => StateType.PlayersInDreamTeamOfTeamState,
+                Suggestions.BackToPreviousMenu or _ => MoveBack(callbackQuery.Message.Chat.Id)
             };
         }
 
@@ -75,9 +76,7 @@ namespace ProjectA.States
                 }
             });
 
-            var messageToSend = "Pick a category you want to get data for.";
-
-            await InteractionHelper.SendInlineKeyboard(botClient, chatId, messageToSend, options);
+            await InteractionHelper.SendInlineKeyboard(botClient, chatId, StateMessages.ChooseCategory, options);
         }
 
         private StateType MoveBack(long chatId)

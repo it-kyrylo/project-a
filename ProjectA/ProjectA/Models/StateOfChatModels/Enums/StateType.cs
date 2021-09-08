@@ -8,8 +8,7 @@
         PlayersByPointsPerGameState,
         PlayersByFormState,
         PlayersByITCRank,
-        PlayersByPointsPerPriceState
-        PlayersByOverallStatsState,
+        PlayersByPointsPerPriceState,
         StatisticsMenuState,
         PlayerDataState,
         TopScorersState,

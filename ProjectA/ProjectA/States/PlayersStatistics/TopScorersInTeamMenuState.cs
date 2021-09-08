@@ -8,8 +8,9 @@ using Telegram.Bot.Types;
 using System.Text;
 using ProjectA.Services.Statistics.ServiceModels;
 using System.Linq;
+using ProjectA.Helpers;
 
-namespace ProjectA.States
+namespace ProjectA.States.PlayersStatistics
 {
     public class TopScorersInTeamMenuState : IState
     {
@@ -27,7 +28,7 @@ namespace ProjectA.States
             var result = await this._statisticsService.GetTopScorersInATeamAsync(teamName, topScorers);
             if (result == null)
             {
-                await BotPrintMessage.PrintMessage(botClient, message.Chat.Id, "Negative number or zero inputted");
+                await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Negative number or zero inputted");
             }
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -39,7 +40,7 @@ namespace ProjectA.States
                 stringBuilder.AppendLine();
                 counter++;
             }
-            await BotPrintMessage.PrintMessage(botClient, message.Chat.Id, stringBuilder.ToString());
+            await InteractionHelper.PrintMessage(botClient, message.Chat.Id, stringBuilder.ToString());
         }
 
         private string[] HandleInput(string inputText)
@@ -62,13 +63,13 @@ namespace ProjectA.States
         {
             if (message.Text == null)
             {
-                return await BotPrintMessage.PrintMessage(botClient, message.Chat.Id, "Please insert your preferences");
+                return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Please insert your preferences");
             }
 
             string[] splittedInput = this.HandleInput(message.Text);
             if (!int.TryParse(splittedInput[1], out int topScorers))
             {
-                return await BotPrintMessage.PrintMessage(botClient, message.Chat.Id, "Wrong preferences format");
+                return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Wrong preferences format");
             }
             string teamName = splittedInput[0];
 
