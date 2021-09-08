@@ -1,7 +1,6 @@
 ﻿using ProjectA.Models.StateOfChatModels.Enums;
 using ProjectA.Services.StateProvider;
 using ProjectA.Services.Statistics;
-using ProjectA.Infrastructure;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -9,6 +8,7 @@ using System.Text;
 using ProjectA.Services.Statistics.ServiceModels;
 using System.Linq;
 using ProjectA.Helpers;
+using static ProjectA.States.StateConstants;
 
 namespace ProjectA.States.PlayersStatistics
 {
@@ -28,12 +28,13 @@ namespace ProjectA.States.PlayersStatistics
             var result = await this._statisticsService.GetTopScorersInATeamAsync(teamName, topScorers);
             if (result == null)
             {
-                await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Negative number or zero inputted");
+                await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Negative number or zero inputted or wrong team name");
             }
             StringBuilder stringBuilder = new StringBuilder();
 
             int counter = 1;
-            stringBuilder.Append($"Player Name               Scored Goals");
+            stringBuilder.Append($"Player Name - Scored Goals");
+            stringBuilder.AppendLine();
             foreach (ScorersData scorer in result)
             {
                 stringBuilder.Append($"{counter}. {scorer.PlayerName} - {scorer.ScoredGoals}");
@@ -63,28 +64,28 @@ namespace ProjectA.States.PlayersStatistics
         {
             if (message.Text == null)
             {
-                return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Please insert your preferences");
+                return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, StateMessages.InsertPlayersSuggestionsPreferences);
             }
 
             string[] splittedInput = this.HandleInput(message.Text);
             if (!int.TryParse(splittedInput[1], out int topScorers))
             {
-                return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Wrong preferences format");
+                return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, StateMessages.WrongInputFormat);
             }
             string teamName = splittedInput[0];
 
-            var chat = await _stateProvider.GetChatStateAsync(message.Chat.Id);
+            //var chat = await _stateProvider.GetChatStateAsync(message.Chat.Id);
 
-            await _stateProvider.UpdateChatStateAsync(chat);
+            //await _stateProvider.UpdateChatStateAsync(chat);
 
             await this.HandleRequest(botClient, message, teamName, topScorers);
 
-            return StateType.MainState;
+            return StateType.StatisticsMenuState;
         }
 
         public async Task BotSendMessage(ITelegramBotClient botClient, long chatId)
         {
-            await botClient.SendTextMessageAsync(chatId, $"Please enter your preferences:\n(position/min Price/max Price)");
+            await botClient.SendTextMessageAsync(chatId, StateMessages.InsertPlayersSuggestionsPreferences);
         }
     }
 }

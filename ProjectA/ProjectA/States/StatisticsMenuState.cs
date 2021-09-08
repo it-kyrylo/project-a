@@ -1,9 +1,6 @@
 ﻿using ProjectA.Helpers;
 using ProjectA.Models.StateOfChatModels.Enums;
 using ProjectA.Services.StateProvider;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -30,7 +27,7 @@ namespace ProjectA.States
                 Statistics.PlayersData => StateType.PlayerDataState,
                 Statistics.TopScorersLeague => StateType.TopScorersState,
                 Statistics.TopScorersTeam => StateType.TopScorersInTeamMenuState,
-                Statistics.PlayersInTeamFromPosition => StateType.PLayersOfPositionInTeamState,
+                Statistics.PlayersInTeamFromPosition => StateType.PlayersOfPositionInTeamState,
                 Statistics.PlayerInDreamtem => StateType.TimesPlayerHasBeenInDreamTeamState,
                 Statistics.PlayersFromTeamInDreamteam => StateType.PlayersInDreamTeamOfTeamState,
                 Suggestions.BackToPreviousMenu or _ => MoveBack(callbackQuery.Message.Chat.Id)
@@ -81,9 +78,9 @@ namespace ProjectA.States
 
         private StateType MoveBack(long chatId)
         {
-            var chat = _stateProvider.GetChatStateAsync(chatId).Result;
-            chat.Current_State = StateType.MainState;
-            _stateProvider.UpdateChatStateAsync(chat);
+            //var chat = _stateProvider.GetChatStateAsync(chatId).Result;
+            //chat.Current_State = StateType.MainState;
+            //_stateProvider.UpdateChatStateAsync(chat);
 
             return StateType.MainState;
         }

@@ -13,7 +13,7 @@
         PlayerDataState,
         TopScorersState,
         TopScorersInTeamMenuState,
-        PLayersOfPositionInTeamState,
+        PlayersOfPositionInTeamState,
         TimesPlayerHasBeenInDreamTeamState,
         PlayersInDreamTeamOfTeamState
     }

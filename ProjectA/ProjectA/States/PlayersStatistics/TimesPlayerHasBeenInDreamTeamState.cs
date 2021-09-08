@@ -5,41 +5,34 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using System.Text;
-using ProjectA.Services.Statistics.ServiceModels;
 using ProjectA.Helpers;
 using static ProjectA.States.StateConstants;
 
-namespace ProjectA.States
+namespace ProjectA.States.PlayersStatistics
 {
-    public class TopScorersState : IState
+    public class TimesPlayerHasBeenInDreamTeamState : IState
     {
         private readonly ICosmosDbStateProviderService _stateProvider;
         private readonly IStatisticsService _statisticsService;
 
-        public TopScorersState(ICosmosDbStateProviderService stateProvider, IStatisticsService statisticsService)
+        public TimesPlayerHasBeenInDreamTeamState(ICosmosDbStateProviderService stateProvider, IStatisticsService statisticsService)
         {
             this._stateProvider = stateProvider;
             this._statisticsService = statisticsService;
         }
 
-        private async Task HandleRequest(ITelegramBotClient botClient, Message message, int topScorers)
+        private async Task HandleRequest(ITelegramBotClient botClient, Message message, string playerName)
         {
-            var result = await this._statisticsService.GetTopScorersAsync(topScorers);
-            if (result == null)
+            var result = await this._statisticsService.TimesPlayerHasBeenInDreamTeamAsync(playerName);
+            if (result == -1)
             {
-                await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Negative number or zero inputted");
+                await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Wrong player name");
             }
-            StringBuilder stringBuilder = new StringBuilder();
 
-            int counter = 1;
-            stringBuilder.Append($"Player Name - Scored Goals");
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append($"{playerName}: {result}");
             stringBuilder.AppendLine();
-            foreach (ScorersData scorer in result)
-            {
-                stringBuilder.Append($"{counter}. {scorer.PlayerName} - {scorer.ScoredGoals}");
-                stringBuilder.AppendLine();
-                counter++;
-            }
+
             await InteractionHelper.PrintMessage(botClient, message.Chat.Id, stringBuilder.ToString());
         }
 
@@ -57,16 +50,11 @@ namespace ProjectA.States
                 return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, StateMessages.InsertPlayersSuggestionsPreferences);
             }
 
-            if (!int.TryParse(message.Text, out int topScorers))
-            {
-                return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, StateMessages.WrongInputFormat);
-            }
-
             //var chat = await _stateProvider.GetChatStateAsync(message.Chat.Id);
 
             //await _stateProvider.UpdateChatStateAsync(chat);
 
-            await this.HandleRequest(botClient, message, topScorers);
+            await this.HandleRequest(botClient, message, message.Text);
 
             return StateType.StatisticsMenuState;
         }
