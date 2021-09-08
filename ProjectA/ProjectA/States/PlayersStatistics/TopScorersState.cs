@@ -28,6 +28,7 @@ namespace ProjectA.States
             if (result == null)
             {
                 await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Negative number or zero inputted");
+                return;
             }
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -61,10 +62,6 @@ namespace ProjectA.States
             {
                 return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, StateMessages.WrongInputFormat);
             }
-
-            //var chat = await _stateProvider.GetChatStateAsync(message.Chat.Id);
-
-            //await _stateProvider.UpdateChatStateAsync(chat);
 
             await this.HandleRequest(botClient, message, topScorers);
 

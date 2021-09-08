@@ -29,6 +29,7 @@ namespace ProjectA.States.PlayersStatistics
             if (result == null)
             {
                 await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Negative number or zero inputted or wrong team name");
+                return;
             }
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -57,7 +58,7 @@ namespace ProjectA.States.PlayersStatistics
         {
             await botClient.AnswerCallbackQueryAsync(callbackQueryId: callbackQuery.Id);
 
-            return StateType.TopScorersState;
+            return StateType.TopScorersInTeamMenuState;
         }
 
         public async Task<StateType> BotOnMessageReceived(ITelegramBotClient botClient, Message message)
@@ -73,10 +74,6 @@ namespace ProjectA.States.PlayersStatistics
                 return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, StateMessages.WrongInputFormat);
             }
             string teamName = splittedInput[0];
-
-            //var chat = await _stateProvider.GetChatStateAsync(message.Chat.Id);
-
-            //await _stateProvider.UpdateChatStateAsync(chat);
 
             await this.HandleRequest(botClient, message, teamName, topScorers);
 

@@ -28,6 +28,7 @@ namespace ProjectA.States.PlayersStatistics
             if (result == null)
             {
                 await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Wrong team name");
+                return;
             }
 
             StringBuilder stringBuilder = new StringBuilder();
@@ -48,7 +49,7 @@ namespace ProjectA.States.PlayersStatistics
         {
             await botClient.AnswerCallbackQueryAsync(callbackQueryId: callbackQuery.Id);
 
-            return StateType.TopScorersState;
+            return StateType.PlayersOfPositionInTeamState;
         }
 
         public async Task<StateType> BotOnMessageReceived(ITelegramBotClient botClient, Message message)
@@ -57,10 +58,6 @@ namespace ProjectA.States.PlayersStatistics
             {
                 return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, StateMessages.InsertPlayersSuggestionsPreferences);
             }
-
-            //var chat = await _stateProvider.GetChatStateAsync(message.Chat.Id);
-
-            //await _stateProvider.UpdateChatStateAsync(chat);
 
             await this.HandleRequest(botClient, message, message.Text);
 
