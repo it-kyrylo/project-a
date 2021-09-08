@@ -18,11 +18,11 @@ namespace ProjectA.Handlers
 {
     public class TelegramHandler : ITelegramUpdateHandler
     {
-        private readonly IHandlerTeamService _handlerTeamService;
+        private readonly IStateTeamService _handlerTeamService;
         private readonly ICosmosDbStateProviderService _stateProvider;
         private readonly IStateFactory _stateFactory;
         public TelegramHandler( 
-            IHandlerTeamService handlerTeamService,
+            IStateTeamService handlerTeamService,
             ICosmosDbStateProviderService stateProvider, 
             IStateFactory stateFactory)
         {

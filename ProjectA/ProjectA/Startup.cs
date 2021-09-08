@@ -41,7 +41,7 @@ namespace ProjectA
             services.AddTransient<IPlayersRepository, PlayersRepository>();
             services.AddTransient<IPlayerSuggestionService, PlayerSuggestionService>();
             services.AddTransient<IStatisticsService, StatisticsService>();
-            services.AddTransient<IHandlerTeamService, HandlerTeamService>();
+            services.AddTransient<IStateTeamService, StateTeamService>();
             services.AddTransient<IStateFactory, StateFactory>();
             
             services.AddSingleton<ITelegramUpdateHandler, TelegramHandler>();

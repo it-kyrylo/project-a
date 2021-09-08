@@ -2,7 +2,7 @@
 
 namespace ProjectA.Services.Handlers
 {
-    public interface IHandlerTeamService
+    public interface IStateTeamService
     {
         Task<string> GetAllTeamsAsync();
 

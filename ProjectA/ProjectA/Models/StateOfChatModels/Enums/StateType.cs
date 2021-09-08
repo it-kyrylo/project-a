@@ -8,6 +8,14 @@
         PlayersByPointsPerGameState,
         PlayersByFormState,
         PlayersByITCRank,
-        PlayersByPointsPerPriceState
+        PlayersByPointsPerPriceState,
+        TeamsMenuState,
+        TopThreeTeamsState,
+        AllTeamsState,
+        StrongestTeamHomeState,
+        StrongestTeamAwayState,
+        MostWinsTeamState,
+        MostLossesTeamState,
+        SearchTeamState
     }
 }

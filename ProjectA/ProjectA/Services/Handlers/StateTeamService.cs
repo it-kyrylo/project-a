@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace ProjectA.Services.Handlers
 {
-    public class HandlerTeamService : IHandlerTeamService
+    public class StateTeamService : IStateTeamService
     {
         private readonly ITeamService _teamService;
         private StringBuilder stringBuilder;
-        public HandlerTeamService(ITeamService teamService)
+        public StateTeamService(ITeamService teamService)
         {
             _teamService = teamService;
         }
@@ -60,7 +60,10 @@ namespace ProjectA.Services.Handlers
             stringBuilder = new StringBuilder();
 
             var team = await _teamService.GetTeamByNameAsync(name);
-
+            if (team == null)
+            {
+                return "No such team !";
+            }
 
             return stringBuilder
                   .Append($"{team.Name} | Strength : {team.Strength} | Wins : {team.Win} | Losses : {team.Loss}")
@@ -89,7 +92,7 @@ namespace ProjectA.Services.Handlers
             var team = teams.Last();
 
 
-            return stringBuilder.Append(team.Name).ToString();
+            return stringBuilder.Append($"{team.Name} | Losses : {team.Loss}").ToString();
         }
 
         public async Task<string> GetTeamsWithMostWinsAsync()
@@ -101,7 +104,7 @@ namespace ProjectA.Services.Handlers
             var team = teams.First();
 
 
-            return stringBuilder.Append(team.Name).ToString();
+            return stringBuilder.Append($"{team.Name} | Wins : {team.Win}").ToString();
         }
 
         public async Task<string> GetTopThreeStrongestTeamsAsync()
