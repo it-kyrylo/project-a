@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using static ProjectA.States.StateConstants;
 
 namespace ProjectA.States
 {
@@ -20,10 +21,10 @@ namespace ProjectA.States
                 //TODO: Add players Statitics and Teams Statistics menue states
                 //TODO: Introduce StatesConstants class
 
-                "/PlayersSuggestion" => StateType.SuggestionsMenuState,
-                //"/PlayersStatistics" => StateType.GetSuggestion,
-                //"/TeamsStatistics" => StateType.GetSuggestion,
-                _ => await PrintMessage(botClient, message.Chat.Id, "Please choose on of the options", StateType.MainState)
+                Suggestions.PlayersSuggestions => StateType.SuggestionsMenuState,
+                //Statistics.PlayersStatistics => StateType.GetSuggestion,
+                //Statistics.TeamStatistics => StateType.GetSuggestion,
+                _ => await PrintMessage(botClient, message.Chat.Id, StateMessages.ChooseOptionMainState, StateType.MainState)
             };
         }
 
@@ -33,10 +34,10 @@ namespace ProjectA.States
         public async Task BotSendMessage(ITelegramBotClient botClient, long chatId)
         {
             //TODO: Introduce StatesConstants class
-            await botClient.SendTextMessageAsync(chatId, $"Please choose on of the options:\n" +
-                                                   $"/PlayersSuggestion\n" +
-                                                   $"/PlayersStatistics\n" +
-                                                   $"/TeamsStatistics");
+            await botClient.SendTextMessageAsync(chatId, $"{StateMessages.ChooseOptionMainState}\n" +
+                                                   $"{Suggestions.PlayersSuggestions}\n" +
+                                                   $"{Statistics.PlayersStatistics}\n" +
+                                                   $"{Statistics.TeamStatistics}");
         }
 
         private static async Task<StateType> PrintMessage(ITelegramBotClient botClient, long chatId, string message, StateType returnState)
