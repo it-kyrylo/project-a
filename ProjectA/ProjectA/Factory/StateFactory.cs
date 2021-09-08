@@ -1,10 +1,12 @@
 ﻿using ProjectA.Models.StateOfChatModels.Enums;
+using ProjectA.Services.Handlers;
 using ProjectA.Services.PlayersSuggestion;
 using ProjectA.Services.StateProvider;
 using ProjectA.Services.Statistics;
 using ProjectA.States;
 using ProjectA.States.PlayersStatistics;
 using ProjectA.States.PlayersSuggestion;
+using ProjectA.States.TeamsStatistic;
 
 namespace ProjectA.Factory
 {
@@ -12,6 +14,8 @@ namespace ProjectA.Factory
     {
         private readonly ICosmosDbStateProviderService stateProvider;
         private readonly IPlayerSuggestionService players;
+        private readonly IStateTeamService teamService;
+        public StateFactory(ICosmosDbStateProviderService stateProvider, IPlayerSuggestionService players,IStateTeamService teamService)
         private readonly IStatisticsService statisticsService;
 
         public StateFactory(ICosmosDbStateProviderService stateProvider, IPlayerSuggestionService players, IStatisticsService statisticsService)

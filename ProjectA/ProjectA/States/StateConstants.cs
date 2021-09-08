@@ -13,11 +13,24 @@
             public const string OverallStatsCriteria = "Overall Stats";
             public const string BackToPreviousMenu = "Back";
         }
-
+        public class TeamStatistics
+        {
+            public const string Statistics = "/TeamsStatistics";
+            public const string TopThreeTeams = "Top 3 Teams";
+            public const string AllTeams = "All Teams";
+            public const string StrongestTeamHome = "Strongest Team Home";
+            public const string StrongestTeamAway = "Strongest Team Away";
+            public const string MostWinsTeam = "Most Wins Team";
+            public const string MostLossesTeam = "Most Losses Team";
+            public const string SearchTeam = "Search Team";
+            public const string BackToPreviousMenu = "Back";
+        }
         public class Statistics
         {
             public const string PlayersStatistics = "/PlayersStatistics";
             public const string TeamStatistics = "/TeamsStatistics";
+        }
+
             public const string PlayersData = "Player's data";
             public const string TopScorersLeague = "Top scorers of the championship";
             public const string TopScorersTeam = "Top scorers in a team";
