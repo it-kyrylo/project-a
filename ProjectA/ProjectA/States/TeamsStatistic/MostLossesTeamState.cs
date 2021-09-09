@@ -8,11 +8,11 @@ using Telegram.Bot.Types;
 
 namespace ProjectA.States.TeamsStatistic
 {
-    public class StrongestHomeState : IState
+    public class MostLossesTeamState : IState
     {
         private readonly IStateTeamService _handlerTeamService;
         private readonly ICosmosDbStateProviderService _stateProvider;
-        public StrongestHomeState(ICosmosDbStateProviderService stateProvider, IStateTeamService handlerTeamService)
+        public MostLossesTeamState(ICosmosDbStateProviderService stateProvider, IStateTeamService handlerTeamService)
         {
             _handlerTeamService = handlerTeamService;
             _stateProvider = stateProvider;
@@ -30,16 +30,16 @@ namespace ProjectA.States.TeamsStatistic
         {
             await botClient.AnswerCallbackQueryAsync(callbackQueryId: callbackQuery.Id);
 
-            return StateType.StrongestTeamHomeState;
+            return StateType.MostLossesTeamState;
         }
 
 
 
         public async Task BotSendMessage(ITelegramBotClient botClient, long chatId)
         {
-            await botClient.SendTextMessageAsync(chatId, "Current strongest Team at home");
+            await botClient.SendTextMessageAsync(chatId, "Current Team with most losses");
 
-            var teams = await _handlerTeamService.GetStrongestTeamHomeAsync();
+            var teams = await _handlerTeamService.GetTeamWithMostLossesAsync();
 
             await InteractionHelper.PrintMessage(botClient, chatId, teams);
 
