@@ -48,10 +48,10 @@ namespace ProjectA.Factory
                 StateType.SearchTeamState => new SearchTeamState(stateProvider, teamService),
                 StateType.AllTeamsState => new AllTeamsState(stateProvider, teamService),
                 StateType.TopThreeTeamsState => new TopThreeTeamsState(stateProvider, teamService),
-                StateType.MostWinsTeamState => new MostWinsState(stateProvider, teamService),
-                StateType.MostLossesTeamState => new MostLossesState(stateProvider, teamService),
-                StateType.StrongestTeamHomeState => new StrongestHomeState(stateProvider, teamService),
-                StateType.StrongestTeamAwayState => new StrongestAwayState(stateProvider, teamService),
+                StateType.MostWinsTeamState => new MostWinsTeamState(stateProvider, teamService),
+                StateType.MostLossesTeamState => new MostLossesTeamState(stateProvider, teamService),
+                StateType.StrongestTeamHomeState => new StrongestTeamHomeState(stateProvider, teamService),
+                StateType.StrongestTeamAwayState => new StrongestTeamAwayState(stateProvider, teamService),
 
                 StateType.MainState or _ => (IState)new MainState(),
             };

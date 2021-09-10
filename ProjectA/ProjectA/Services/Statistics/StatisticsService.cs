@@ -24,15 +24,15 @@ namespace ProjectA.Services.Statistics
 
         private int GetPositionIndex(string positionName)
         {
-            switch (positionName)
+            switch (positionName.ToUpper())
             {
-                case "Goalkeeper":
+                case "GOALKEEPER":
                     return 1;
-                case "Defender":
+                case "DEFENDER":
                     return 2;
-                case "Midfielder":
+                case "MIDFIELDER":
                     return 3;
-                case "Forward":
+                case "FORWARD":
                     return 4;
                 default:
                     return -1;
