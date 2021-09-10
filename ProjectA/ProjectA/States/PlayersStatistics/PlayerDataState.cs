@@ -38,13 +38,12 @@ namespace ProjectA.States.PlayersStatistics
             }
         }
 
-        private async Task HandleRequest(ITelegramBotClient botClient, Message message, string playerName)
+        private async Task<string> HandleRequest(ITelegramBotClient botClient, Message message, string playerName)
         {
             var result = await this._statisticsService.GetPayerData(playerName);
             if (result == null)
             {
-                await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Wrong player's name");
-                return;
+                return "Wrong player's name";
             }
 
             string position = GetPositionName(result.Element_Type);
@@ -66,7 +65,7 @@ namespace ProjectA.States.PlayersStatistics
             stringBuilder.Append($"Times in dreamteam: {result.Dreamteam_Count}");
             stringBuilder.AppendLine();
 
-            await InteractionHelper.PrintMessage(botClient, message.Chat.Id, stringBuilder.ToString());
+            return stringBuilder.ToString();
         }
 
         public async Task<StateType> BotOnCallBackQueryReceived(ITelegramBotClient botClient, CallbackQuery callbackQuery)
@@ -83,7 +82,8 @@ namespace ProjectA.States.PlayersStatistics
                 return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, StateMessages.InsertPlayersSuggestionsPreferences);
             }
 
-            await this.HandleRequest(botClient, message, message.Text);
+            string result = await this.HandleRequest(botClient, message, message.Text);
+            await InteractionHelper.PrintMessage(botClient, message.Chat.Id, result);
 
             return StateType.StatisticsMenuState;
         }

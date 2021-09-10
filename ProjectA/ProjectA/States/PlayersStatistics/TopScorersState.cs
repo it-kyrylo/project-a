@@ -22,13 +22,12 @@ namespace ProjectA.States
             this._statisticsService = statisticsService;
         }
 
-        private async Task HandleRequest(ITelegramBotClient botClient, Message message, int topScorers)
+        private async Task<string> HandleRequest(ITelegramBotClient botClient, Message message, int topScorers)
         {
             var result = await this._statisticsService.GetTopScorersAsync(topScorers);
             if (result == null)
             {
-                await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Negative number or zero inputted");
-                return;
+                return "Negative number or zero inputted";
             }
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -41,7 +40,7 @@ namespace ProjectA.States
                 stringBuilder.AppendLine();
                 counter++;
             }
-            await InteractionHelper.PrintMessage(botClient, message.Chat.Id, stringBuilder.ToString());
+            return stringBuilder.ToString();
         }
 
         public async Task<StateType> BotOnCallBackQueryReceived(ITelegramBotClient botClient, CallbackQuery callbackQuery)
@@ -63,7 +62,8 @@ namespace ProjectA.States
                 return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, StateMessages.WrongInputFormat);
             }
 
-            await this.HandleRequest(botClient, message, topScorers);
+            string result = await this.HandleRequest(botClient, message, topScorers);
+            await InteractionHelper.PrintMessage(botClient, message.Chat.Id, result);
 
             return StateType.StatisticsMenuState;
         }

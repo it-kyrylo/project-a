@@ -23,13 +23,12 @@ namespace ProjectA.States.PlayersStatistics
             this._statisticsService = statisticsService;
         }
 
-        private async Task HandleRequest(ITelegramBotClient botClient, Message message, string teamName, int topScorers)
+        private async Task<string> HandleRequest(ITelegramBotClient botClient, Message message, string teamName, int topScorers)
         {
             var result = await this._statisticsService.GetTopScorersInATeamAsync(teamName, topScorers);
             if (result == null)
             {
-                await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Negative number or zero inputted or wrong team name");
-                return;
+                return "Negative number or zero inputted or wrong team name";
             }
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -42,7 +41,7 @@ namespace ProjectA.States.PlayersStatistics
                 stringBuilder.AppendLine();
                 counter++;
             }
-            await InteractionHelper.PrintMessage(botClient, message.Chat.Id, stringBuilder.ToString());
+            return stringBuilder.ToString();
         }
 
         private string[] HandleInput(string inputText)
@@ -75,7 +74,8 @@ namespace ProjectA.States.PlayersStatistics
             }
             string teamName = splittedInput[0];
 
-            await this.HandleRequest(botClient, message, teamName, topScorers);
+            string result = await this.HandleRequest(botClient, message, teamName, topScorers);
+            await InteractionHelper.PrintMessage(botClient, message.Chat.Id, result);
 
             return StateType.StatisticsMenuState;
         }
