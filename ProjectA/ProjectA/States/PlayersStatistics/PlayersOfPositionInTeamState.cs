@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using System.Text;
-using ProjectA.Helpers;
 using static ProjectA.States.StateConstants;
 using System.Linq;
 using ProjectA.Models.PlayersModels;
@@ -65,7 +64,8 @@ namespace ProjectA.States.PlayersStatistics
         {
             if (message.Text == null)
             {
-                return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, StateMessages.InsertPlayersSuggestionsPreferences);
+                await botClient.SendTextMessageAsync(message.Chat.Id, StateMessages.InsertPlayersSuggestionsPreferences);
+                return StateType.StatisticsMenuState;
             }
 
             string[] splittedInput = this.HandleInput(message.Text);
@@ -73,7 +73,7 @@ namespace ProjectA.States.PlayersStatistics
             string position = splittedInput[1];
 
             string result = await this.HandleRequest(botClient, message, teamName, position);
-            await InteractionHelper.PrintMessage(botClient, message.Chat.Id, result);
+            await botClient.SendTextMessageAsync(message.Chat.Id, result);
 
             return StateType.StatisticsMenuState;
         }

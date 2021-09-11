@@ -6,7 +6,6 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using System.Text;
 using ProjectA.Services.Statistics.ServiceModels;
-using ProjectA.Helpers;
 using static ProjectA.States.StateConstants;
 
 namespace ProjectA.States
@@ -54,16 +53,18 @@ namespace ProjectA.States
         {
             if (message.Text == null)
             {
-                return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, StateMessages.InsertPlayersSuggestionsPreferences);
+                await botClient.SendTextMessageAsync(message.Chat.Id, StateMessages.InsertPlayersSuggestionsPreferences);
+                return StateType.StatisticsMenuState;
             }
 
             if (!int.TryParse(message.Text, out int topScorers))
             {
-                return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, StateMessages.WrongInputFormat);
+                await botClient.SendTextMessageAsync(message.Chat.Id, StateMessages.WrongInputFormat);
+                return StateType.StatisticsMenuState;
             }
 
             string result = await this.HandleRequest(botClient, message, topScorers);
-            await InteractionHelper.PrintMessage(botClient, message.Chat.Id, result);
+            await botClient.SendTextMessageAsync(message.Chat.Id, result);
 
             return StateType.StatisticsMenuState;
         }

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using System.Text;
-using ProjectA.Helpers;
 using static ProjectA.States.StateConstants;
 
 namespace ProjectA.States.PlayersStatistics
@@ -47,11 +46,12 @@ namespace ProjectA.States.PlayersStatistics
         {
             if (message.Text == null)
             {
-                return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, StateMessages.InsertPlayersSuggestionsPreferences);
+                await botClient.SendTextMessageAsync(message.Chat.Id, StateMessages.InsertPlayersSuggestionsPreferences);
+                return StateType.StatisticsMenuState;
             }
 
             string result = await this.HandleRequest(botClient, message, message.Text);
-            await InteractionHelper.PrintMessage(botClient, message.Chat.Id, result);
+            await botClient.SendTextMessageAsync(message.Chat.Id, result);
 
             return StateType.StatisticsMenuState;
         }
