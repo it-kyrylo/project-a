@@ -25,12 +25,9 @@ namespace ProjectA.Helpers
                    .Split('/', StringSplitOptions.RemoveEmptyEntries)
                    .ToArray();
 
-        public static async Task<StateType> PrintMessage(ITelegramBotClient botClient, long chatId, string message)
+        public static async Task PrintMessage(ITelegramBotClient botClient, long chatId, string message)
         {
             await botClient.SendTextMessageAsync(chatId, message);
-
-            return StateType.PlayersByOverallStatsState;
-
         }
 
         public static void GetUserPreferences(
