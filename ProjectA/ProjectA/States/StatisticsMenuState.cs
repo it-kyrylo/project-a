@@ -26,7 +26,7 @@ namespace ProjectA.States
             {
                 Statistics.PlayersData => StateType.PlayerDataState,
                 Statistics.TopScorersLeague => StateType.TopScorersState,
-                Statistics.TopScorersTeam => StateType.TopScorersInTeamMenuState,
+                Statistics.TopScorersTeam => StateType.TopScorersInTeamState,
                 Statistics.PlayersInTeamFromPosition => StateType.PlayersOfPositionInTeamState,
                 Statistics.PlayerInDreamtem => StateType.TimesPlayerHasBeenInDreamTeamState,
                 Statistics.PlayersFromTeamInDreamteam => StateType.PlayersInDreamTeamOfTeamState,

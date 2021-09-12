@@ -11,12 +11,12 @@ using static ProjectA.States.StateConstants;
 
 namespace ProjectA.States.PlayersStatistics
 {
-    public class TopScorersInTeamMenuState : IState
+    public class TopScorersInTeamState : IState
     {
         private readonly ICosmosDbStateProviderService _stateProvider;
         private readonly IStatisticsService _statisticsService;
 
-        public TopScorersInTeamMenuState(ICosmosDbStateProviderService stateProvider, IStatisticsService statisticsService)
+        public TopScorersInTeamState(ICosmosDbStateProviderService stateProvider, IStatisticsService statisticsService)
         {
             this._stateProvider = stateProvider;
             this._statisticsService = statisticsService;
@@ -56,7 +56,7 @@ namespace ProjectA.States.PlayersStatistics
         {
             await botClient.AnswerCallbackQueryAsync(callbackQueryId: callbackQuery.Id);
 
-            return StateType.TopScorersInTeamMenuState;
+            return StateType.TopScorersInTeamState;
         }
 
         public async Task<StateType> BotOnMessageReceived(ITelegramBotClient botClient, Message message)

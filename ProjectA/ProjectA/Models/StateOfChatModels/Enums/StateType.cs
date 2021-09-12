@@ -22,7 +22,7 @@
         StatisticsMenuState,
         PlayerDataState,
         TopScorersState,
-        TopScorersInTeamMenuState,
+        TopScorersInTeamState,
         PlayersOfPositionInTeamState,
         TimesPlayerHasBeenInDreamTeamState,
         PlayersInDreamTeamOfTeamState

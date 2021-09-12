@@ -47,7 +47,7 @@ namespace ProjectA.States.PlayersStatistics
         {
             await botClient.AnswerCallbackQueryAsync(callbackQueryId: callbackQuery.Id);
 
-            return StateType.PlayersOfPositionInTeamState;
+            return StateType.PlayersInDreamTeamOfTeamState;
         }
 
         public async Task<StateType> BotOnMessageReceived(ITelegramBotClient botClient, Message message)

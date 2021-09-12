@@ -41,7 +41,7 @@ namespace ProjectA.Factory
                 StateType.PlayersInDreamTeamOfTeamState => new PlayersInDreamTeamOfTeamState(stateProvider, statisticsService),
                 StateType.PlayersOfPositionInTeamState => new PlayersOfPositionInTeamState(stateProvider, statisticsService),
                 StateType.TimesPlayerHasBeenInDreamTeamState => new TimesPlayerHasBeenInDreamTeamState(stateProvider, statisticsService),
-                StateType.TopScorersInTeamMenuState => new TopScorersInTeamMenuState(stateProvider, statisticsService),
+                StateType.TopScorersInTeamState => new TopScorersInTeamState(stateProvider, statisticsService),
                 StateType.TopScorersState => new TopScorersState(stateProvider, statisticsService),
 
                 StateType.TeamsMenuState => new TeamsMenuState(stateProvider),
