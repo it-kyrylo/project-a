@@ -14,8 +14,7 @@ namespace ProjectA.Services.PlayersSuggestion
         private const int SuggestedPlayersCount = 5;
         private const double DoubleDivisor = 1.0;
         private const double PriceDivisor = 10.0;
-        private const double UsualFPLPlayerMinPrice = 3.7;
-        private const double UsualFPLPlayerMaxPrice = 14.1;
+        private const double MinPriceValue = 0;
         private readonly IPlayersRepository players;
 
         public PlayerSuggestionService(IPlayersRepository players)
@@ -210,9 +209,8 @@ namespace ProjectA.Services.PlayersSuggestion
 
         private static bool IsPriceRangeValid(double minPrice, double maxPrice)
         {
-            if (minPrice <= UsualFPLPlayerMinPrice ||
-                minPrice >= maxPrice ||
-                maxPrice >= UsualFPLPlayerMaxPrice)
+            if (minPrice <= MinPriceValue ||
+                minPrice >= maxPrice)
             {
                 return false;
             }

@@ -25,12 +25,20 @@ namespace ProjectA.Helpers
                    .Split('/', StringSplitOptions.RemoveEmptyEntries)
                    .ToArray();
 
-        public static async Task<StateType> PrintMessage(ITelegramBotClient botClient, long chatId, string message)
+        public static async Task PrintMessage(ITelegramBotClient botClient, long chatId, string message)
         {
             await botClient.SendTextMessageAsync(chatId, message);
+        }
 
-            return StateType.PlayersByOverallStatsState;
-
+        public static void GetUserPreferences(
+            string[] userInputParsed,
+            out string position,
+            out double minPrice,
+            out double maxPrice)
+        {
+            position = userInputParsed[0];
+            minPrice = double.Parse(userInputParsed[1]);
+            maxPrice = double.Parse(userInputParsed[2]);
         }
     }
 }

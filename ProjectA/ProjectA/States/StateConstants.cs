@@ -12,6 +12,11 @@
             public const string PointsPerPriceCriteria = "Points Per Price";
             public const string OverallStatsCriteria = "Overall Stats";
             public const string BackToPreviousMenu = "Back";
+            public const string PlayersByOverallStats = "Here's your result ordered by Overall stats";
+            public const string PlayersByForm = "Here's your result ordered by Form";
+            public const string PlayersByITC = "Here's your result ordered by ITC Rank";
+            public const string PlayersByPointsPerGame = "Here's your result ordered by Points Per Game";
+            public const string PlayersByPointsPerPrice = "Here's your result ordered by Points Per Price";
         }
         public class TeamStatistics
         {
@@ -45,7 +50,10 @@
             public const string InsertPlayersSuggestionsPreferences = "Please insert your preferences:";
             public const string PlayersSuggestionPreferencesFormat = "(position/min Price/max Price)";
 
-            public const string WrongInputFormat = "Wrong preferences format";
+            public const string WrongInputFormat = "Wrong preferences format.";
+            public const string WrongPlayersPosition = "Sorry, there's no such position in football.";
+            public const string InvalidPrices = "Sorry, invalid prices.";
+            public const string MinPriceSmallerThanMaxPrice = "The minimum price must be lower than the maximum price.";
 
             public const string GetPlayersSuggestionMessage = "To get 5 suggested players, please choose a criteria:";
         }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using static ProjectA.States.StateConstants.StateMessages;
+using static ProjectA.States.StateConstants.Suggestions;
 
 namespace ProjectA.States.PlayersSuggestion
 {
@@ -25,23 +26,39 @@ namespace ProjectA.States.PlayersSuggestion
 
         public async Task<StateType> BotOnMessageReceived(ITelegramBotClient botClient, Message message)
         {
-            await Guard.AgainstNull(botClient, message, InsertPlayersSuggestionsPreferences);
+            var isUserInputNull = await Guard.AgainstNull(botClient, message, InsertPlayersSuggestionsPreferences);
 
-            var userInputArguments = InteractionHelper.ProcessUserInput(message.Text);
-
-            if (userInputArguments.Length != 3 ||
-                double.TryParse(userInputArguments[0], out _) ||
-                !double.TryParse(userInputArguments[1], out double minPrice) ||
-                !double.TryParse(userInputArguments[2], out double maxPrice))
+            if (isUserInputNull)
             {
-                return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, WrongInputFormat);
+                return StateType.PlayersByPointsPerPriceState;
             }
 
-            var position = userInputArguments[0];
+            var isUserInputInFormat = await Guard.AgainstWrongFormat(botClient, message, WrongInputFormat);
+
+            if (!isUserInputInFormat)
+            {
+                return StateType.PlayersByPointsPerPriceState;
+            }
+
+            var userInputParsed = InteractionHelper.ProcessUserInput(message.Text);
+
+            InteractionHelper.GetUserPreferences(
+                userInputParsed,
+                out string position,
+                out double minPrice,
+                out double maxPrice);
+
+            var arePricesInCorrectRange = await Guard.AgainstInvalidPrices(botClient, message, MinPriceSmallerThanMaxPrice, minPrice, maxPrice);
+
+            if (!arePricesInCorrectRange)
+            {
+                return StateType.PlayersByFormState;
+            }
 
             var chat = await _stateProvider.GetChatStateAsync(message.Chat.Id);
 
             await _stateProvider.UpdateChatStateAsync(chat);
+
             var suggestionResult = await GetSuggestionAsStringAsync(minPrice, maxPrice, position);
 
             await InteractionHelper.PrintMessage(botClient, message.Chat.Id, suggestionResult);
@@ -73,6 +90,10 @@ namespace ProjectA.States.PlayersSuggestion
                         .AppendLine("No such result")
                         .ToString();
             }
+
+            sb
+                .AppendLine(PlayersByPointsPerPrice)
+                .AppendLine();
 
             foreach (var player in suggestedPlayers)
             {

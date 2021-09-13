@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using static ProjectA.States.StateConstants.StateMessages;
+using static ProjectA.States.StateConstants.Suggestions;
 
 namespace ProjectA.States.PlayersSuggestion
 {
@@ -25,18 +26,34 @@ namespace ProjectA.States.PlayersSuggestion
 
         public async Task<StateType> BotOnMessageReceived(ITelegramBotClient botClient, Message message)
         {
-            await Guard.AgainstNull(botClient, message, InsertPlayersSuggestionsPreferences);
+            var isUserInputNull = await Guard.AgainstNull(botClient, message, InsertPlayersSuggestionsPreferences);
+
+            if (isUserInputNull)
+            {
+                return StateType.PlayersByFormState;
+            }
+
+            var isUserInputInFormat = await Guard.AgainstWrongFormat(botClient, message, WrongInputFormat);
+
+            if (!isUserInputInFormat)
+            {
+                return StateType.PlayersByFormState;
+            }
 
             var userInputParsed = InteractionHelper.ProcessUserInput(message.Text);
 
-            if (userInputParsed.Length != 3 ||
-                !double.TryParse(userInputParsed[1], out double minPrice) ||
-                !double.TryParse(userInputParsed[2], out double maxPrice))
-            {
-                return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, WrongInputFormat);
-            }
+            InteractionHelper.GetUserPreferences(
+                userInputParsed, 
+                out string position,
+                out double minPrice, 
+                out double maxPrice);
 
-            var position = userInputParsed[0];
+            var arePricesInCorrectRange = await Guard.AgainstInvalidPrices(botClient, message, MinPriceSmallerThanMaxPrice, minPrice, maxPrice);
+
+            if (!arePricesInCorrectRange)
+            {
+                return StateType.PlayersByFormState;
+            }
 
             var chat = await _stateProvider.GetChatStateAsync(message.Chat.Id);
 
@@ -66,6 +83,10 @@ namespace ProjectA.States.PlayersSuggestion
             var suggestedPlayers = await this.players.GetByCurrentForm(position, minPrice, maxPrice);
 
             var sb = new StringBuilder();
+
+            sb
+                .AppendLine(PlayersByForm)
+                .AppendLine();
 
             if (suggestedPlayers == null)
             {
