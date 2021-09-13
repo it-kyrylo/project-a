@@ -22,8 +22,8 @@ namespace ProjectA.States
                 //TODO: Introduce StatesConstants class
 
                 Suggestions.PlayersSuggestions => StateType.SuggestionsMenuState,
-                //Statistics.PlayersStatistics => StateType.GetSuggestion,
                 TeamStatistics.Statistics => StateType.TeamsMenuState,
+                Statistics.PlayersStatistics => StateType.StatisticsMenuState,
                 _ => await PrintMessage(botClient, message.Chat.Id, StateMessages.ChooseOptionMainState, StateType.MainState)
             };
         }
