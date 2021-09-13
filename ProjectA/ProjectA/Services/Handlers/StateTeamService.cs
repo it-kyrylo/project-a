@@ -47,7 +47,7 @@ namespace ProjectA.Services.Handlers
         {
             stringBuilder = new StringBuilder();
 
-            var team = await _teamService.GetStrongestTeamAwayAsync();
+            var team = await _teamService.GetStrongestTeamHomeAsync();
 
 
             return stringBuilder
@@ -99,7 +99,7 @@ namespace ProjectA.Services.Handlers
         {
             stringBuilder = new StringBuilder();
 
-            var teams = await _teamService.GetTeamsWithMostDrawsAsync();
+            var teams = await _teamService.GetTeamsWithMostWinsAsync();
 
             var team = teams.First();
 
