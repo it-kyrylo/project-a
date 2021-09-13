@@ -33,14 +33,15 @@ namespace UnitTests.TeamStatisticsTests.Repository
 
             _teamsRepository = new TeamRepository(_leagueClientMock.Object);
         }
+
         [Test]
         public void GetAllTeams_CompareCollectionType_ReturnListCollection()
         {
-
             var actualResult = _teamsRepository.GetAllTeamsAsync().Result;
 
             actualResult.Should().BeOfType(typeof(List<Team>));
         }
+
         [Test]
         public void GetAllTeam_CheckNumberOfTeams_ReturnOne()
         {
@@ -49,6 +50,7 @@ namespace UnitTests.TeamStatisticsTests.Repository
 
             actualNumberOfTeams.Should().Equals(expectedNumberOfTeams);
         }
+
         [Test]
         public void GetTeamByName_SearchForExistingTeamCaseSensetive_ReturnsArsenalTeam()
         {
@@ -58,6 +60,7 @@ namespace UnitTests.TeamStatisticsTests.Repository
             actualTeam.Name.Should().BeEquivalentTo(expectedTeamName);
 
         }
+
         [Test]
         public void GetTeamByName_SearchForExistingTeamCaseInsensitive_ReturnsArsenalTeam()
         {
@@ -67,6 +70,7 @@ namespace UnitTests.TeamStatisticsTests.Repository
             actualTeam.Name.Should().BeEquivalentTo(expectedTeamName);
 
         }
+
         [Test]
         public void GetTeamByName_SearchNoneExistingTeam_ReturnsNull()
         {
