@@ -21,7 +21,8 @@ namespace ProjectA.States.TeamsStatistic
         {
             if (message.Text == null)
             {
-                return await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Please enter the teams name");
+                await InteractionHelper.PrintMessage(botClient, message.Chat.Id, "Please enter the teams name");
+                return StateType.SearchTeamState;
             }
 
             var chat = await _stateProvider.GetChatStateAsync(message.Chat.Id);

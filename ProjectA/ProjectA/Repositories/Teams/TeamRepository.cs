@@ -19,7 +19,7 @@ namespace ProjectA.Repositories.Teams
         {
             var allTeams = await GetAllTeamsAsync();
        
-            var team = allTeams.FirstOrDefault(n => n.Name == name);
+            var team = allTeams.FirstOrDefault(n => n.Name.ToLower() == name.ToLower());
        
             return team;
         }

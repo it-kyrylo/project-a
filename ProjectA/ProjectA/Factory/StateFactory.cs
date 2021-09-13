@@ -2,7 +2,9 @@
 using ProjectA.Services.Handlers;
 using ProjectA.Services.PlayersSuggestion;
 using ProjectA.Services.StateProvider;
+using ProjectA.Services.Statistics;
 using ProjectA.States;
+using ProjectA.States.PlayersStatistics;
 using ProjectA.States.PlayersSuggestion;
 using ProjectA.States.TeamsStatistic;
 
@@ -13,10 +15,13 @@ namespace ProjectA.Factory
         private readonly ICosmosDbStateProviderService stateProvider;
         private readonly IPlayerSuggestionService players;
         private readonly IStateTeamService teamService;
-        public StateFactory(ICosmosDbStateProviderService stateProvider, IPlayerSuggestionService players,IStateTeamService teamService)
+        private readonly IStatisticsService statisticsService;
+
+        public StateFactory(ICosmosDbStateProviderService stateProvider, IPlayerSuggestionService players, IStatisticsService statisticsService, IStateTeamService teamService)
         {
             this.stateProvider = stateProvider;
             this.players = players;
+            this.statisticsService = statisticsService;
             this.teamService = teamService;
         }
 
@@ -30,14 +35,24 @@ namespace ProjectA.Factory
                 StateType.PlayersByPointsPerGameState => new PlayersByPointsPerGameState(stateProvider, players),
                 StateType.PlayersByITCRank => new PlayersByITCRank(stateProvider, players),
                 StateType.PlayersByPointsPerPriceState => new PlayersByPointsPerPriceState(stateProvider, players),
-                StateType.TeamsMenuState=> new TeamsMenuState(stateProvider),
-                StateType.SearchTeamState => new SearchTeamState(stateProvider,teamService),
-                StateType.AllTeamsState => new AllTeamsState(stateProvider,teamService),
-                StateType.TopThreeTeamsState => new TopThreeTeamsState(stateProvider,teamService),
-                StateType.MostWinsTeamState => new MostWinsState(stateProvider,teamService),
-                StateType.MostLossesTeamState => new MostLossesState(stateProvider,teamService),
-                StateType.StrongestTeamHomeState => new StrongestHomeState(stateProvider,teamService),
-                StateType.StrongestTeamAwayState => new StrongestAwayState(stateProvider,teamService),
+
+                StateType.StatisticsMenuState => new StatisticsMenuState(stateProvider),
+                StateType.PlayerDataState => new PlayerDataState(stateProvider, statisticsService),
+                StateType.PlayersInDreamTeamOfTeamState => new PlayersInDreamTeamOfTeamState(stateProvider, statisticsService),
+                StateType.PlayersOfPositionInTeamState => new PlayersOfPositionInTeamState(stateProvider, statisticsService),
+                StateType.TimesPlayerHasBeenInDreamTeamState => new TimesPlayerHasBeenInDreamTeamState(stateProvider, statisticsService),
+                StateType.TopScorersInTeamState => new TopScorersInTeamState(stateProvider, statisticsService),
+                StateType.TopScorersState => new TopScorersState(stateProvider, statisticsService),
+
+                StateType.TeamsMenuState => new TeamsMenuState(stateProvider),
+                StateType.SearchTeamState => new SearchTeamState(stateProvider, teamService),
+                StateType.AllTeamsState => new AllTeamsState(stateProvider, teamService),
+                StateType.TopThreeTeamsState => new TopThreeTeamsState(stateProvider, teamService),
+                StateType.MostWinsTeamState => new MostWinsTeamState(stateProvider, teamService),
+                StateType.MostLossesTeamState => new MostLossesTeamState(stateProvider, teamService),
+                StateType.StrongestTeamHomeState => new StrongestTeamHomeState(stateProvider, teamService),
+                StateType.StrongestTeamAwayState => new StrongestTeamAwayState(stateProvider, teamService),
+
                 StateType.MainState or _ => (IState)new MainState(),
             };
 
