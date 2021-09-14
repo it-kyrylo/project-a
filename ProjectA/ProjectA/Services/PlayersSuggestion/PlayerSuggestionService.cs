@@ -15,6 +15,7 @@ namespace ProjectA.Services.PlayersSuggestion
         private const double DoubleDivisor = 1.0;
         private const double PriceDivisor = 10.0;
         private const double MinPriceValue = 0;
+
         private readonly IPlayersRepository playersRepository;
 
         public PlayerSuggestionService(IPlayersRepository playersRepository)

@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -30,7 +28,7 @@ namespace ProjectA.Helpers
             return true;
         }
 
-        public static bool AgainstInvalidPrices (ITelegramBotClient botClient, Message message, double minPrice, double maxPrice)
+        public static bool AgainstInvalidPrices(ITelegramBotClient botClient, Message message, double minPrice, double maxPrice)
         {
             if (minPrice < 0 || minPrice > maxPrice)
             {
@@ -39,6 +37,5 @@ namespace ProjectA.Helpers
 
             return true;
         }
-
     }
 }
