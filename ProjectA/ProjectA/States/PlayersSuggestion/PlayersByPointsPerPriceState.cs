@@ -14,29 +14,33 @@ namespace ProjectA.States.PlayersSuggestion
     public class PlayersByPointsPerPriceState : IState
     {
         private readonly ICosmosDbStateProviderService _stateProvider;
-        private readonly IPlayerSuggestionService players;
+        private readonly IPlayerSuggestionService playerSuggestionService;
 
         public PlayersByPointsPerPriceState(
             ICosmosDbStateProviderService stateProvider,
             IPlayerSuggestionService players)
         {
             _stateProvider = stateProvider;
-            this.players = players;
+            this.playerSuggestionService = players;
         }
 
         public async Task<StateType> BotOnMessageReceived(ITelegramBotClient botClient, Message message)
         {
-            var isUserInputNull = await Guard.AgainstNull(botClient, message, InsertPlayersSuggestionsPreferences);
+            var isUserInputNull = Guard.AgainstNull(botClient, message);
 
             if (isUserInputNull)
             {
+                await InteractionHelper.PrintMessage(botClient, message.Chat.Id, InsertPlayersSuggestionsPreferences);
+
                 return StateType.PlayersByPointsPerPriceState;
             }
 
-            var isUserInputInFormat = await Guard.AgainstWrongFormat(botClient, message, WrongInputFormat);
+            var isUserInputInFormat = Guard.AgainstWrongFormat(botClient, message);
 
             if (!isUserInputInFormat)
             {
+                await InteractionHelper.PrintMessage(botClient, message.Chat.Id, WrongInputFormat);
+
                 return StateType.PlayersByPointsPerPriceState;
             }
 
@@ -48,11 +52,13 @@ namespace ProjectA.States.PlayersSuggestion
                 out double minPrice,
                 out double maxPrice);
 
-            var arePricesInCorrectRange = await Guard.AgainstInvalidPrices(botClient, message, MinPriceSmallerThanMaxPrice, minPrice, maxPrice);
+            var arePricesInCorrectRange = Guard.AgainstInvalidPrices(botClient, message, minPrice, maxPrice);
 
             if (!arePricesInCorrectRange)
             {
-                return StateType.PlayersByFormState;
+                await InteractionHelper.PrintMessage(botClient, message.Chat.Id, MinPriceSmallerThanMaxPrice);
+
+                return StateType.PlayersByPointsPerPriceState;
             }
 
             var chat = await _stateProvider.GetChatStateAsync(message.Chat.Id);
@@ -80,7 +86,7 @@ namespace ProjectA.States.PlayersSuggestion
 
         private async Task<string> GetSuggestionAsStringAsync(double minPrice, double maxPrice, string position)
         {
-            var suggestedPlayers = await this.players.GetByPointsPerPrice(position, minPrice, maxPrice);
+            var suggestedPlayers = await this.playerSuggestionService.GetByPointsPerPrice(position, minPrice, maxPrice);
 
             var sb = new StringBuilder();
 

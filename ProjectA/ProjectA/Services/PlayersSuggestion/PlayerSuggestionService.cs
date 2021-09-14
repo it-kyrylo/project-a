@@ -15,11 +15,11 @@ namespace ProjectA.Services.PlayersSuggestion
         private const double DoubleDivisor = 1.0;
         private const double PriceDivisor = 10.0;
         private const double MinPriceValue = 0;
-        private readonly IPlayersRepository players;
+        private readonly IPlayersRepository playersRepository;
 
-        public PlayerSuggestionService(IPlayersRepository players)
+        public PlayerSuggestionService(IPlayersRepository playersRepository)
         {
-            this.players = players;
+            this.playersRepository = playersRepository;
         }
 
         public async Task<IEnumerable<PlayerSpecificStatsModel>> GetByPricePointsPerGameRatio(string position, double minPrice, double maxPrice)
@@ -33,7 +33,7 @@ namespace ProjectA.Services.PlayersSuggestion
 
             TransformPricesInIntegers(ref minPrice, ref maxPrice);
 
-            var allPlayers = await this.players.GetAllPlayersAsync();
+            var allPlayers = await this.playersRepository.GetAllPlayersAsync();
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
@@ -70,7 +70,7 @@ namespace ProjectA.Services.PlayersSuggestion
 
             TransformPricesInIntegers(ref minPrice, ref maxPrice);
 
-            var allPlayers = await this.players.GetAllPlayersAsync();
+            var allPlayers = await this.playersRepository.GetAllPlayersAsync();
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
@@ -106,7 +106,7 @@ namespace ProjectA.Services.PlayersSuggestion
 
             TransformPricesInIntegers(ref minPrice, ref maxPrice);
 
-            var allPlayers = await this.players.GetAllPlayersAsync();
+            var allPlayers = await this.playersRepository.GetAllPlayersAsync();
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
@@ -142,7 +142,7 @@ namespace ProjectA.Services.PlayersSuggestion
 
             TransformPricesInIntegers(ref minPrice, ref maxPrice);
 
-            var allPlayers = await this.players.GetAllPlayersAsync();
+            var allPlayers = await this.playersRepository.GetAllPlayersAsync();
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
@@ -178,7 +178,7 @@ namespace ProjectA.Services.PlayersSuggestion
 
             TransformPricesInIntegers(ref minPrice, ref maxPrice);
 
-            var allPlayers = await this.players.GetAllPlayersAsync();
+            var allPlayers = await this.playersRepository.GetAllPlayersAsync();
 
             var suggestedPlayers = allPlayers
                 .Where(p =>
