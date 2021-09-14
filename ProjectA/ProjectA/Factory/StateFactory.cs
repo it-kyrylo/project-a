@@ -13,14 +13,18 @@ namespace ProjectA.Factory
     public class StateFactory : IStateFactory
     {
         private readonly ICosmosDbStateProviderService stateProvider;
-        private readonly IPlayerSuggestionService players;
+        private readonly IPlayerSuggestionService playerSuggestionService;
         private readonly IStateTeamService teamService;
         private readonly IStatisticsService statisticsService;
 
-        public StateFactory(ICosmosDbStateProviderService stateProvider, IPlayerSuggestionService players, IStatisticsService statisticsService, IStateTeamService teamService)
+        public StateFactory(
+            ICosmosDbStateProviderService stateProvider, 
+            IPlayerSuggestionService playerSuggestionService, 
+            IStatisticsService statisticsService, 
+            IStateTeamService teamService)
         {
             this.stateProvider = stateProvider;
-            this.players = players;
+            this.playerSuggestionService = playerSuggestionService;
             this.statisticsService = statisticsService;
             this.teamService = teamService;
         }
@@ -30,11 +34,11 @@ namespace ProjectA.Factory
             var result = state switch
             {
                 StateType.SuggestionsMenuState => new SuggestionsMenuState(stateProvider),
-                StateType.PlayersByOverallStatsState => new PlayersByOverallStatsState(stateProvider, players),
-                StateType.PlayersByFormState => new PlayersByFormState(stateProvider, players),
-                StateType.PlayersByPointsPerGameState => new PlayersByPointsPerGameState(stateProvider, players),
-                StateType.PlayersByITCRank => new PlayersByITCRank(stateProvider, players),
-                StateType.PlayersByPointsPerPriceState => new PlayersByPointsPerPriceState(stateProvider, players),
+                StateType.PlayersByOverallStatsState => new PlayersByOverallStatsState(stateProvider, playerSuggestionService),
+                StateType.PlayersByFormState => new PlayersByFormState(stateProvider, playerSuggestionService),
+                StateType.PlayersByPointsPerGameState => new PlayersByPointsPerGameState(stateProvider, playerSuggestionService),
+                StateType.PlayersByITCRank => new PlayersByITCRank(stateProvider, playerSuggestionService),
+                StateType.PlayersByPointsPerPriceState => new PlayersByPointsPerPriceState(stateProvider, playerSuggestionService),
 
                 StateType.StatisticsMenuState => new StatisticsMenuState(stateProvider),
                 StateType.PlayerDataState => new PlayerDataState(stateProvider, statisticsService),
